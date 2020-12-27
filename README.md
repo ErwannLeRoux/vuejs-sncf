@@ -1,3 +1,24 @@
 # vuejs-sncf
 
-Ce projet est réalisé dans le cadre du module IHM de notre Master 2 Informatique. Le but étant de mettre en pratique tout ce qu'on a appris lors des cours d’IHM, aussi bien en terme d’UX que de développement web Front.
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
