@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { stationsStore } from './storages/stations.js'
+import { store } from './storages/stations.js'
 import App from './App.vue'
 
-createApp(App).use(stationsStore).mount('#app')
+createApp(App).use(store).mount('#app')
