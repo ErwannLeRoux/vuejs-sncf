@@ -9,6 +9,7 @@ export const store = createStore({
             handicapFacilities: [],
             wifiEquipment: [],
             salesWaitingTime: [],
+            waitingServices: [],
         }
     },
     getters: {
@@ -27,6 +28,9 @@ export const store = createStore({
         getSalesWaitingTime: (state) => {
             return state.salesWaitingTime
         },
+        getWaitingServices: (state) => {
+            return state.waitingServices
+        },
     },
     mutations: {
         disconnect(state){
@@ -35,6 +39,7 @@ export const store = createStore({
             state.handicapFacilities = []
             state.wifiEquipment = []
             state.salesWaitingTime = []
+            state.waitingServices = []
         },
         getStations(state) {
             axios.get("https://data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&q=&rows=-1")
@@ -72,6 +77,14 @@ export const store = createStore({
             axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=attente-au-guichet&rows=-1")
                 .then((response) => {
                     state.salesWaitingTime = response.data.records
+                }).catch((error) => {
+                console.log(error)
+            });
+        },
+        getWaitingServices(state) {
+            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=gares-pianos&q=&rows=-1")
+                .then((response) => {
+                    state.waitingServices = response.data.records
                 }).catch((error) => {
                 console.log(error)
             });
