@@ -1,15 +1,22 @@
 <template>
   <div id="app">
-    
+    <Navbar :current-location="this.$route.path" />
     <router-view />
   </div>
+  
 </template>
 
 <script>
+import Navbar from './components/Navbar.vue'
 
 export default {
   name: 'App',
   components: {
+    Navbar,
+  },
+  data() {
+    return {
+    }
   }
 }
 </script>
@@ -21,6 +28,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+</style>
+
+<style lang="scss">
+  @import "./assets/custom.scss";
+  @import "../node_modules/bootstrap/scss/bootstrap.scss";
 </style>
