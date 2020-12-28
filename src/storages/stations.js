@@ -6,7 +6,8 @@ export const store = createStore({
         return {
             stations: [],
             cleanliness: [],
-            handicapFacilities: []
+            handicapFacilities: [],
+            wifiEquipment: []
         }
     },
     getters: {
@@ -19,12 +20,16 @@ export const store = createStore({
         getHandicapFacilities: (state) => {
             return state.handicapFacilities
         },
+        getWifiEquipment: (state) => {
+            return state.wifiEquipment
+        },
     },
     mutations: {
         disconnect(state){
             state.stations = []
             state.cleanliness = []
             state.handicapFacilities = []
+            state.wifiEquipment = []
         },
         getStations(state) {
             axios.get("https://data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&q=&rows=-1")
@@ -46,6 +51,14 @@ export const store = createStore({
             axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=accompagnement-pmr-gares&rows=-1")
                 .then((response) => {
                     state.handicapFacilities = response.data.records
+                }).catch((error) => {
+                console.log(error)
+            });
+        },
+        getWifiEquipment(state) {
+            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=gares-equipees-du-wifi&rows=-1")
+                .then((response) => {
+                    state.wifiEquipment = response.data.records
                 }).catch((error) => {
                 console.log(error)
             });
