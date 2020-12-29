@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-light">
     <Navbar :current-location="this.$route.path" />
     <router-view />
   </div>
