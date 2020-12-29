@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
   <a class="navbar-brand" href="/">
     <img src="./../assets/images/satisfaction.png" width="60" class="d-inline-block align-top" alt="" />
   </a>
