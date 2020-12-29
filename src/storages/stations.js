@@ -90,4 +90,16 @@ export const store = createStore({
             });
         },
     },
+    actions: {
+        getStations (context) {
+            return new Promise(( resolve, reject ) => {
+                axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&q=departemen%3DMANCHE+OR+ORNE+OR+CALVADOS&rows=-1")
+                    .then(result => {
+                        context.commit("getStations", result.data.records);
+                        resolve(result.data.records);
+                    })
+                    .catch(() => reject());
+            });
+        }
+    }
 })
