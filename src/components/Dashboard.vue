@@ -8,7 +8,7 @@
                 <Topfivetab :info="fiveWorst" :stations-list="stations" /> 
             </div>
         </div>
-        <ScoreOverviewChart />
+        <PercentSpinnerChart :percent-value="95" :good-threshold="95" :bad-threshold="90" :caption="'Taux de conformité global'" />
     </main>
     
 </template>
@@ -16,12 +16,12 @@
 <script>
 import { store } from './../storages/stations.js';
 import Topfivetab from './Topfivetab.vue';
-import ScoreOverviewChart from './ScoreOverviewChart.vue';
+import PercentSpinnerChart from './PercentSpinnerChart' 
 export default {
     name: "Dashboard",
     components: {
         Topfivetab,
-        ScoreOverviewChart
+        PercentSpinnerChart
     },
     data() {
         return {
