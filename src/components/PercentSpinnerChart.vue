@@ -1,5 +1,5 @@
 <template>
-    <div id="chart">       
+    <div id="spinnerChartContainer">       
     </div>
 </template>
 
@@ -45,9 +45,10 @@ export default {
             return d.value
         }) 
 
-        let svg = d3.select('#chart').append("svg")
-        .attr("width", this.width)
-        .attr("height", this.height)
+        let svg = d3.select('#spinnerChartContainer').append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 "+this.width+" "+this.height)
+        .classed("svg-content", true)
         .append("g")
         .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
 
@@ -78,4 +79,20 @@ export default {
 </script>
 
 <style scoped>
+    #spinnerChartContainer{
+        display: inline-block;
+        position: relative;
+        max-width: 300px;
+        width: 100%;
+        height : 300px;
+        overflow: hidden;
+    }
+
+    .svg-content {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+     
 </style>

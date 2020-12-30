@@ -80,9 +80,12 @@ export default {
         let self = this
 
         const svg = d3.select("#chart").append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 "+this.svgWidth+" "+this.svgHeigth)
+            .classed("svg-content", true)
             .attr("id", "svg")
-            .attr("width", this.svgWidth)
-            .attr("height", this.svgHeigth)
+            //.attr("width", this.svgWidth)
+            //.attr("height", this.svgHeigth)
             .append("g")
             .attr("transform", this.gTransform);    
 
@@ -152,4 +155,11 @@ export default {
 </script>
 
 <style scoped>
+    #chart {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        overflow: hidden;
+    }
 </style>

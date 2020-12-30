@@ -9,6 +9,7 @@
             </div>
         </div>
         <PercentSpinnerChart :percent-value="95" :good-threshold="95" :bad-threshold="90" :caption="'Taux de conformité global'" />
+        <ComplianceTrackingChart />
     </main>
     
 </template>
@@ -16,12 +17,14 @@
 <script>
 import { store } from './../storages/stations.js';
 import Topfivetab from './Topfivetab.vue';
-import PercentSpinnerChart from './PercentSpinnerChart' 
+import PercentSpinnerChart from './PercentSpinnerChart'
+import ComplianceTrackingChart from './ComplianceTrackingChart'
 export default {
     name: "Dashboard",
     components: {
         Topfivetab,
-        PercentSpinnerChart
+        PercentSpinnerChart,
+        ComplianceTrackingChart
     },
     data() {
         return {
