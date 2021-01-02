@@ -9,7 +9,7 @@
             </div>
         </div>
         <PercentSpinnerChart :percent-value="95" :good-threshold="95" :bad-threshold="90" :caption="'Taux de conformité global'" />
-        <ComplianceTrackingChart />
+        <ComplianceTrackingChart  :good-threshold="95" :bad-threshold="90" />
     </main>
     
 </template>
