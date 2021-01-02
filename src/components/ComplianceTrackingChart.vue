@@ -1,5 +1,5 @@
 <template>
-    <div id="complianceChartCompliance">      
+    <div id="complianceTrackingChart">      
     </div>
     
 </template>
@@ -16,7 +16,7 @@ export default {
         return {
             margin : {
                 top: 20,
-                right: 120,
+                right: 40,
                 bottom: 60,
                 left: 40
             },
@@ -55,26 +55,20 @@ export default {
             return "translate(" + this.margin.left + "," + this.margin.top + ")"       
         }
         ,
-        thresholds(){
+        area(){
             return [
                 {
-                    lower : this.minY
-                    ,
-                    upper: this.badThreshold
-                    ,
+                    lower : this.minY,
+                    upper: this.badThreshold,
                     color: "red"
                 },
                 {
-                    lower : this.badThreshold
-                    ,
-                    upper: this.goodThreshold
-                    ,
+                    lower : this.badThreshold,
+                    upper: this.goodThreshold,
                     color: "orange"                },
                 {
-                    lower : this.goodThreshold
-                    ,
-                    upper: 100
-                    ,
+                    lower : this.goodThreshold,
+                    upper: 100,
                     color : "green"
                 },
             ]
@@ -99,7 +93,7 @@ export default {
                 values: [
                     {mounth : 1, value: 90 },
                     {mounth : 2, value: 91 },
-                    {mounth : 3, value: 92 },
+                    {mounth : 3, value: 85 },
                     {mounth : 4, value: 93 },
                     {mounth : 5, value: 94 },
                     {mounth : 6, value: 95 },
@@ -116,7 +110,7 @@ export default {
                 values: [
                     {mounth : 1, value: 81 },
                     {mounth : 2, value: 88 },
-                    {mounth : 3, value: 86 },
+                    {mounth : 3, value: 85 },
                     {mounth : 4, value: 99 },
                     {mounth : 5, value: 99 },
                     {mounth : 6, value: 97},
@@ -133,7 +127,7 @@ export default {
         var color = d3.scaleOrdinal(d3.schemeCategory10);
         
         // Creation svg 
-        const svg = d3.select("#complianceChartCompliance").append("svg")
+        const svg = d3.select("#complianceTrackingChart").append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "0 0 "+this.svgWidth+" "+this.svgHeigth)
             .classed("svg-content", true)
@@ -182,6 +176,9 @@ export default {
             .attr("class","axis")
             .call(yAxis)
 
+        //Envoie des données à la légende du graphique
+        
+
         //Creation et ajout des courbes en fonction du dataset    
         let line = d3.line()
             .x(function(d){
@@ -206,7 +203,7 @@ export default {
 
         //Creation des ajouts des zones en arriere plan
         svg.selectAll(".area")
-        .data(self.thresholds)
+        .data(self.area)
         .enter()
         .append("g")
         .attr("class", "area")
@@ -270,7 +267,6 @@ export default {
                 div.html("Taux de conformité : <span id='val'>"+ d.value +" %</span>")
                 .style("left", (e.pageX + 10)  + "px")     
                 .style("top", (e.pageY - 50) + "px");
-                console.log(d.value)
                 d3.select("#val")
                 .style("color", self.getValueColor(d.value))
                 
@@ -300,7 +296,7 @@ export default {
 
 <style scoped>
 
-    #complianceChartCompliance {
+    #complianceTrackingChart {
         display: inline-block;
         position: relative;
         width: 100%;
