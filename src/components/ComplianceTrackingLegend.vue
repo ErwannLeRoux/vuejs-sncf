@@ -31,51 +31,21 @@
             return {
                 areas : [
                     {
-                        id : 1,
                         color: "green",
-                        label: "Taux de conformités correcte"
+                        label: "Taux de conformités correctes"
                     },
                     {
-                        id : 2,
                         color: "orange",
                         label: "Taux de conformités passables"        
                     },
                     {
-                        id : 3,
                         color : "red",
                         label: "Taux de conformités rejetés",
                     },
                 ],
-                lines : [
-                    {
-                        id : 1,
-                        color: "blue",
-                        label: "2018"
-                    },
-                    {
-                        id : 2,
-                        color: "orange",
-                        label: "2017"        
-                    },
-                    {
-                        id : 1,
-                        color: "blue",
-                        label: "2018"
-                    },
-                    {
-                        id : 2,
-                        color: "orange",
-                        label: "2017"        
-                    },
-                    {
-                        id : 1,
-                        color: "blue",
-                        label: "2018"
-                    },
-                ]
             }  
         },
-        props: [/*"lines"*/],
+        props: ["lines"],
         computed:{
         
         },
