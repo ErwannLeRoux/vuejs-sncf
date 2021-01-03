@@ -91,15 +91,38 @@ export const store = createStore({
         },
     },
     actions: {
-        getStations (context) {
+        getStations (context, payload) {
+            let region = 'Normandie'
+            if(payload && payload.region_name) region = payload.region_name
             return new Promise(( resolve, reject ) => {
-                axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&q=departemen%3DMANCHE+OR+ORNE+OR+CALVADOS&rows=-1")
+                axios.get(`http://antoinegonzalez.fr:8080/stations/?region=${region}`)
                     .then(result => {
-                        context.commit("getStations", result.data.records);
-                        resolve(result.data.records);
+                        context.commit("getStations", result.data.data);
+                        resolve(result.data.data);
                     })
-                    .catch(() => reject());
+                    .catch((err) => reject(err));
             });
+        },
+        getRegions (context, payload) {
+          let region = 'Normandie'
+          if(payload && payload.region_name) region = payload.region_name
+          return new Promise(( resolve, reject ) => {
+              axios.get(`http://antoinegonzalez.fr:8080/regions/?region=${region}`)
+                  .then(result => {
+                      resolve(result.data.data[0]);
+                  })
+                  .catch(() => reject());
+          });
+        },
+        getRegionList (context) {
+          return new Promise(( resolve, reject ) => {
+              axios.get(`http://antoinegonzalez.fr:8080/regions`)
+                  .then(result => {
+                      resolve(result.data.data);
+                  })
+                  .catch(() => reject());
+          });
         }
+
     }
 })

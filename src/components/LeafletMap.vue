@@ -1,5 +1,10 @@
 <template>
     <div id="mapContainer" ></div>
+    <select v-model="regionSelected" @change="regionChanged()">
+      <option v-for="option in options" v-bind:key="option" v-bind:value="option">
+        {{ option }}
+      </option>
+    </select>
 </template>
 <script>
     import {
@@ -18,6 +23,9 @@
         },
         data() {
             return {
+                regionSelected: 'Normandie',
+                options: [],
+                markers: [],
                 map: null,
                 zoom: 5,
                 iconWidth: 25,
@@ -30,9 +38,38 @@
             }
         },
         methods: {
+            regionChanged: function() {
 
+              const L = window.L
+
+              store.dispatch("getStations", {region_name: this.regionSelected}).then((res) => {
+                store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
+                  this.markers.removeFrom(this.map)
+                  this.markers = L.layerGroup()
+                  this.map.setView([region.lat, region.lng], 7);
+
+                  this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                      attribution: '',
+                  });
+                  this.tileLayer.addTo(this.map);
+
+                  res.forEach((station) => {
+                      let marker = L.marker([station.wgs_84[0], station.wgs_84[1]])
+                      marker.bindTooltip(station.name).openTooltip();
+                      this.markers.addLayer(marker);
+                  })
+                  this.markers.addTo(this.map)
+                }).catch(console.error)
+            }).catch(console.error)
+            }
         },
         mounted() {
+            store.dispatch("getRegionList").then((response) => {
+              response.forEach((region) => {
+                this.options.push(region.region_name)
+              })
+            })
+
             const L = window.L
             delete L.Icon.Default.prototype._getIconUrl;
 
@@ -42,24 +79,25 @@
                 shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
             });
 
-            let markers = L.layerGroup()
+            this.markers = L.layerGroup()
 
-            store.dispatch("getStations").then((res) => {
-                this.map = L.map('mapContainer').setView([48.62361111, 0.128888889], 8);
+            store.dispatch("getStations", {region_name: this.regionSelected}).then((res) => {
+              store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
+
+                this.map = L.map('mapContainer').setView([region.lat, region.lng], 7);
 
                 this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '',
                 });
                 this.tileLayer.addTo(this.map);
 
-                res.forEach(function(station) {
-
-
-                    let marker = L.marker([station.fields.y_wgs84, station.fields.x_wgs84])
-                    markers.addLayer(marker);
-                    marker.bindTooltip(station.fields.libelle).openTooltip();
+                res.forEach((station) => {
+                    let marker = L.marker([station.wgs_84[0], station.wgs_84[1]])
+                    marker.bindTooltip(station.name).openTooltip();
+                    this.markers.addLayer(marker);
                 })
-                markers.addTo(this.map)
+                this.markers.addTo(this.map)
+              })
             })
         }
     };
