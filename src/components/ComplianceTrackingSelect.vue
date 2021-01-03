@@ -17,10 +17,18 @@
         },
         data() {
             return {
-                selectedYears : [this.yearsList.find( y => y.select == true).year]
+                selectedYears : []
             }
         },
         props: ["yearsList"],
+        watch: {
+            yearsList: {
+                deep : true,
+                handler: function(){
+                    this.selectedYears = [this.yearsList.find( y => y.select == true).year]
+                } 
+            }
+        },
         computed:{
         },
         methods :{

@@ -1,10 +1,10 @@
 <template>
-    <div id="complianceTracking">  
+    <div id="complianceTracking"> 
+        <h2>Suivi du taux de conformité de la SNCF à l'année</h2>
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
-        <ComplianceTrackingLegend :lines="legendData" />
-    </div>
-    
+        <ComplianceTrackingLegend :lines="legendData" /> 
+    </div>    
 </template>
 
 <script>
@@ -28,6 +28,14 @@
             };
         },
         props: ["dataYears", "currentYear"],
+        watch : {
+            dataYears: {
+                deep : true,
+                handler: function(){
+                    this.graphData = this.initializeGraphData()
+                } 
+            }
+        },
         computed:{
             yearsList() {
                 let res = []
@@ -47,6 +55,9 @@
                             }
                         )
                     }
+                })
+                res.sort((a,b)=>{
+                    return parseInt(a.year)-parseInt(b.year)
                 })
                 return res
             },
@@ -77,7 +88,7 @@
             }
         },
         mounted: function(){
-            this.graphData = this.initializeGraphData()
+            
         }
     }
 </script>
