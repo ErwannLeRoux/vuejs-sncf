@@ -10,9 +10,13 @@ export const store = createStore({
             wifiEquipment: [],
             salesWaitingTime: [],
             waitingServices: [],
+            global_scores: [],
         }
     },
     getters: {
+        getGlobalScores: (state) => {
+            return state.global_scores
+        },
         getStations: (state) => {
             return state.stations
         },
@@ -33,6 +37,19 @@ export const store = createStore({
         },
     },
     mutations: {
+        getGlobalScores(state) {
+            axios.get("http://192.168.1.16:8080/global_scores")
+            .then((response) => {
+                response.data.data.forEach((year) => {
+                    year.data.sort((a,b) => {
+                        return parseInt(a.month) - parseInt(b.month)
+                    })
+                });
+                state.global_scores = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            });
+        },
         disconnect(state){
             state.stations = []
             state.cleanliness = []
