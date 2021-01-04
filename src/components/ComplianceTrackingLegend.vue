@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-center">
             <span class="legend-item-area p-2" :key="area.color" v-for="area in areas">
                 <svg class="legend-item-svg" width="1em" height="1em">
-                    <circle class='area-legend' cx="0.5em" cy="0.5em" r="0.5em" :style="'fill:'+ area.color+'; stroke: black; stroke-width: 1;'"></circle>    
+                    <circle class='area-legend' cx="0.5em" cy="0.5em" r="0.5em" :style="'fill:'+ area.color"></circle>    
                 </svg>
                 {{area.label}}
             </span>

@@ -1,15 +1,16 @@
 <template>
     <main class="container-fluid">
         <DashboardHeader :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
+        
         <div class="row rounded shadow-sm bg-white">
             <div class="col-sm-9">
                
             </div>
             <div class="col-sm">
-                <PercentSpinnerChart :percent-value="95" :good-threshold="95" :bad-threshold="90" :caption="'Taux de conformité global'" /> 
+                <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" /> 
             </div>
         </div>
-         
+        
         <div class="row">
             <div class="col-sm">
                <Topfivetab :info="fiveBest" :stations-list="stations" />
@@ -18,9 +19,8 @@
                 <Topfivetab :info="fiveWorst" :stations-list="stations" /> 
             </div>
         </div>
-        <ComplianceTracking :years-list="yearsList" :dataYears="globalScores" :currentYear="currentYear"/>
+        <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" />
     </main>
-    
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
         Topfivetab,
         PercentSpinnerChart,
         ComplianceTracking,
-        DashboardHeader   
+        DashboardHeader,
     },
     data() {
         return {
@@ -47,10 +47,20 @@ export default {
                 title : "Nos 5 plus mauvaises Gares",
                 color : "red",
             },
-            currentYear : "2020",
+            goodThreshold: "95",
+            badThreshold: "90",
+            currentYear : null,
+            yearScore : null
         };
     },
     computed:{
+        maxYear(){
+            let years = []
+            this.globalScores.forEach((y) => {
+                years.push(y.year)
+            })
+            return Math.max(...years)
+        },
         stations(){
             return store.getters.getStations.slice(0,5);
         },
@@ -77,10 +87,30 @@ export default {
                 }
             })
             res.sort((a,b)=>{
-                return parseInt(a.year)-parseInt(b.year)
-            })
+                    return parseInt(a.year)-parseInt(b.year)
+                })
             return res
+            
         },
+        averageScore() {
+            
+            if(this.yearScore != null){
+                return this.yearScore['average_score']
+            }else{
+                return 0
+            }
+        }
+    },
+    watch :{
+        globalScores: {
+            deep : true,
+            handler: function(){
+                this.currentYear = this.maxYear
+            }
+        },
+        currentYear(){
+            this.yearScore = this.globalScores.find(d => d.year == this.currentYear)
+        }
     },
     methods :{
         modifyCurrentYear(selectedYear){

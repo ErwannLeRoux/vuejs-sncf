@@ -77,7 +77,6 @@ export default {
         dataYears: {
             deep : true,
             handler: function(){
-                console.log(this.dataYears)
                 this.buildGraph()
             } 
         }

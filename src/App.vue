@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="bg-light">
+  <div id="app" class="">
     <Navbar :current-location="this.$route.path" />
     <router-view />
   </div>
@@ -23,10 +23,13 @@ export default {
 
 <style>
 #app {
+  background-color: #822171;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
 }
+
+
 </style>

@@ -3,7 +3,7 @@
         <label for="annee">Dashboard Année</label>
         <span id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{selectYear}}            
+                {{selectedYear}}            
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -22,9 +22,17 @@ export default {
 
     },
     props: ["currentYear","yearsList"],
+    watch:{
+        currentYear:{
+            deep : true,
+            handler : function (){
+                this.selectedYear = this.currentYear
+            }
+        }
+    },
     data() {
         return {
-            selectYear: this.currentYear
+            selectedYear: this.currentYear
         };
     },
     computed:{
@@ -32,8 +40,8 @@ export default {
     },
     methods :{
         select(item){
-            this.selectYear = item.year
-            this.$emit("selectChange", this.selectYear)
+            this.selectedYear = item.year
+            this.$emit("selectChange", this.selectedYear)
         }
     },
     mounted: function(){
