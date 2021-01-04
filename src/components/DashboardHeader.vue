@@ -1,6 +1,6 @@
 <template>
-   <header class="my-4 p-2">
-        <label for="annee">Dashboard Année</label>
+   <header class="container-fluid my-4">
+        <h2 id="title">Dashboard Année</h2>
         <span id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
@@ -10,7 +10,6 @@
                 <a class="dropdown-item" href="#" :key="item.year" v-for="item in yearsList" @click="select(item)">{{item.year}}</a>    
             </div>
         </span>
-
    </header>
 </template>
 
@@ -52,6 +51,7 @@ export default {
 
 <style scoped>
     header {
+        padding:0;
         text-align: left;
     }
 
@@ -64,5 +64,7 @@ export default {
         margin-left: 0.5em;
     }
 
-
+    #title{
+        display: inline-block;
+    }
 </style>

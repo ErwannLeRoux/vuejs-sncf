@@ -1,6 +1,5 @@
 <template>
-    <div class="rounded shadow-sm bg-white " id="complianceTracking"> 
-        <h4>Suivi du taux de conformité de la SNCF à l'année</h4>
+    <div class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
         <ComplianceTrackingLegend :lines="legendData" /> 
@@ -83,10 +82,9 @@
     }
 </script>
 <style scoped>
-#complianceTracking{
-    color:#2c3e50;
-}
-
+    #complianceTracking{
+        color:#2c3e50;
+    }
 </style>
 
 

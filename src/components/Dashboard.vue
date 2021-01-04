@@ -1,52 +1,41 @@
 <template>
-    <main class="container-fluid">
+    <div id="main" class="container-fluid pb-4">
         <DashboardHeader :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
-        
-        <div class="row rounded shadow-sm bg-white">
-            <div class="col-sm-9">
+        <div class="container-fluid rounded shadow-sm bg-white my-2">
+            <div class="row">
+                <div class="col-sm-9">
                
+                </div>
+                <div class="col-sm">
+                    <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" /> 
+                </div>
             </div>
-            <div class="col-sm">
-                <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" /> 
-            </div>
+            
         </div>
-        
-        <div class="row">
-            <div class="col-sm">
-               <Topfivetab :info="fiveBest" :stations-list="stations" />
-            </div>
-            <div class="col-sm">
-                <Topfivetab :info="fiveWorst" :stations-list="stations" /> 
-            </div>
+        <DashboardStationsTop :year="currentYear" />
+        <div class="container-fluid mt-4 p-0">
+            <h4 id="#chartTitle">Suivi du taux de conformité de la SNCF à l'année</h4>
+            <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" />
         </div>
-        <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" />
-    </main>
+    </div>
 </template>
 
 <script>
 import { store } from './../storages/stations.js';
-import Topfivetab from './Topfivetab.vue';
 import PercentSpinnerChart from './PercentSpinnerChart.vue'
 import ComplianceTracking from './ComplianceTracking.vue'
 import DashboardHeader from './DashboardHeader.vue'
+import DashboardStationsTop from './DashboardStationsTop.vue'
 export default {
     name: "Dashboard",
     components: {
-        Topfivetab,
         PercentSpinnerChart,
         ComplianceTracking,
         DashboardHeader,
+        DashboardStationsTop,
     },
     data() {
         return {
-            fiveBest : {
-                title : "Nos 5 meilleures Gares",
-                color : "green",    
-            },
-            fiveWorst : {
-                title : "Nos 5 plus mauvaises Gares",
-                color : "red",
-            },
             goodThreshold: "95",
             badThreshold: "90",
             currentYear : null,
@@ -125,10 +114,10 @@ export default {
 </script>
 
 <style scoped>
-    main {
+    #main {
         width:85%;
         margin:auto;
+        padding:0;
     }
-    
 </style>
 

@@ -58,7 +58,7 @@
 </script>
 <style scoped>
     .area-legend{
-        opacity : 0.3;
+        opacity : 0.5;
     }
     #complianceTrackingLegend{
         text-align: left;
