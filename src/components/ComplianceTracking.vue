@@ -1,6 +1,6 @@
 <template>
     <div id="complianceTracking"> 
-        <h2>Suivi du taux de conformité de la SNCF à l'année</h2>
+        <h4>Suivi du taux de conformité de la SNCF à l'année</h4>
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
         <ComplianceTrackingLegend :lines="legendData" /> 
@@ -27,40 +27,29 @@
                 legendData: []
             };
         },
-        props: ["dataYears", "currentYear"],
+        props: ["dataYears", "currentYear", "yearsList"],
         watch : {
             dataYears: {
                 deep : true,
                 handler: function(){
                     this.graphData = this.initializeGraphData()
                 } 
+            },
+            yearsList : {
+                deep : true,
+                handler: function(){
+                    let selection = []
+                    this.yearsList.forEach((y) => {
+                        if(y.select){
+                            selection.push(y.year)
+                        }
+                    })
+                    this.actualizeGraphData(selection)
+                } 
             }
         },
         computed:{
-            yearsList() {
-                let res = []
-                this.dataYears.forEach((y) => {
-                    if(y.year == this.currentYear){
-                        res.push(
-                            {
-                                year : y.year,
-                                select : true
-                            }
-                        )
-                    }else{
-                        res.push(
-                            {
-                                year : y.year,
-                                select : false
-                            }
-                        )
-                    }
-                })
-                res.sort((a,b)=>{
-                    return parseInt(a.year)-parseInt(b.year)
-                })
-                return res
-            },
+            
         },
         methods :{
             selectionChange(selections){

@@ -14,8 +14,8 @@ export default {
     props: ["percentValue", "goodThreshold", "badThreshold", "caption"],
     data() {
         return {
-            width : 300,
-            height : 300,
+            width : 200,
+            height : 200,
             radius : 100
         };
     },
@@ -82,9 +82,7 @@ export default {
     #spinnerChartContainer{
         display: inline-block;
         position: relative;
-        max-width: 300px;
         width: 100%;
-        height : 300px;
         overflow: hidden;
     }
 

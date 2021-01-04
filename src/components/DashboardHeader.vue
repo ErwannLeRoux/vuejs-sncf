@@ -1,0 +1,60 @@
+<template>
+   <header class="my-4 p-2">
+        <label for="annee">Dashboard Année</label>
+        <span id="select-year" class="dropdown show ">
+            <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{selectYear}}            
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#" :key="item.year" v-for="item in yearsList" @click="select(item)">{{item.year}}</a>    
+            </div>
+        </span>
+
+   </header>
+</template>
+
+<script>
+
+export default {
+    name: "DashboardHeader",
+    components: {
+
+    },
+    props: ["currentYear","yearsList"],
+    data() {
+        return {
+            selectYear: this.currentYear
+        };
+    },
+    computed:{
+      
+    },
+    methods :{
+        select(item){
+            this.selectYear = item.year
+            this.$emit("selectChange", this.selectYear)
+        }
+    },
+    mounted: function(){
+        
+    }
+}
+</script>
+
+<style scoped>
+    header {
+        text-align: left;
+    }
+
+    label, span {
+        margin: 0;
+        font-size: 1.5em;
+    }
+
+    span{
+        margin-left: 0.5em;
+    }
+
+
+</style>
