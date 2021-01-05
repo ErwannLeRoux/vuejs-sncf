@@ -96,7 +96,6 @@ export default {
             d3.select("#complianceTrackingSvg").remove()
             d3.select("#score-tooltip").remove()
             if(self.dataYears.length != 0){
-                
                 // Creation svg 
                 const svg = d3.select("#complianceTrackingChart").append("svg")
                     .attr("preserveAspectRatio", "xMinYMin meet")
@@ -120,7 +119,7 @@ export default {
                 let yScale =  d3.scaleLinear().
                     range([this.height, 0]);
 
-                xScale.domain(self.dataYears[0].values.map((d) => this.monthMap[d.month]))
+                xScale.domain(["Janvier","Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"])
 
                 
                 let color = d3.scaleOrdinal(d3.schemeDark2);
@@ -251,7 +250,7 @@ export default {
                                 .style("display","inherit")
                                 div.transition()        
                                 .duration(200)      
-                                .style("opacity", 0.9)
+                                .style("opacity", 0.8)
                                 .style("display", "inherit")   
                                 div.html("Taux de conformité : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
                                 .style("left", (e.pageX + 10)  + "px")     

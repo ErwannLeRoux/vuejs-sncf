@@ -81,6 +81,12 @@ export const store = createStore({
         getStation(state,uic_code){
             axios.get(`http://192.168.1.16:8081/station/${uic_code}`)
             .then((response) => {
+                response.data.data[0].scores_for_years.forEach((d) => {
+                    d.data.sort((a,b) => {
+                        return parseInt(a.month) - parseInt(b.month) 
+                    })
+                    
+                })
                 state.station = response.data.data[0]
             }).catch((error) => {
                 console.log(error)

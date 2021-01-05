@@ -2,7 +2,7 @@
     <div class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
-        <ComplianceTrackingLegend :lines="legendData" /> 
+        <ComplianceTrackingLegend :lines="legendData" />
     </div>    
 </template>
 
@@ -27,12 +27,12 @@
             };
         },
         props: ["dataYears", "yearsList"],
-        watch : {
+        watch : { 
             dataYears: {
                 deep : true,
                 handler: function(){
-                    this.graphData = this.initializeGraph()
-                } 
+                    this.graphData = this.initializeGraphData()
+                }
             },
             yearsList : {
                 deep : true,
@@ -54,14 +54,14 @@
             selectionChange(selections){
                 this.actualizeGraphData(selections)
             },
-            initializeGraph(){
+            initializeGraphData(){
                 let res = []
                 this.dataYears.forEach((y) => {
                     let selectedYear = this.yearsList.find(d => d.select == true)
                     res.push({
                         year: y.year,
                         values : y.data,
-                        display : (selectedYear.year == y.year)
+                        display : (y.year == selectedYear.year)
                     })
                 })
                 return res

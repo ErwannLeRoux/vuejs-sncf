@@ -1,7 +1,7 @@
 <template>
     <div id="complianceTrackingSelect">
-        <div class="form-check form-check-inline" v-bind:key="item.year" v-for="item in yearsList" @change="selectionChange($event)"> 
-            <input class="form-check-input" type="checkbox" :id="'inlineCheckbox'+item.year" :value="item" v-model="selectedYears" >
+        <div class="form-check form-check-inline" v-bind:key="item.year" v-for="item in yearsList">
+            <input class="form-check-input" type="checkbox" :id="'inlineCheckbox'+item.year" :value="item.year" v-model="selectedYears" @change="selectionChange($event)">
             <label class="form-check-label" :for="'inlineCheckbox'+item.year">{{item.year}}</label>
         </div>
     </div>
@@ -25,16 +25,16 @@
             yearsList: {
                 deep : true,
                 handler: function(){
-                    this.selectedYears = [this.yearsList.find( y => y.select == true)]
+                    this.selectedYears = [this.yearsList.find( y => y.select == true).year]
                 } 
             }
         },
         computed:{
         },
         methods :{
-            selectionChange(){
-                console.log("yo")
-                this.$emit('selectionChange', this.selectedYears.map(d=>d.year))
+            selectionChange(event){
+                event.preventDefault()
+                this.$emit('selectionChange', this.selectedYears)
             }
         },
         mounted: function(){

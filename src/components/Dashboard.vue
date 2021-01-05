@@ -1,6 +1,6 @@
 <template>
     <div id="main" class="container-fluid pb-4">
-        <HeaderWithSelectYear :text="title" :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
+        <HeaderWithSelectYear :text="title" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear" />
         <div class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
             <div class="row">
                 <div class="col-sm-9">
@@ -82,8 +82,7 @@ export default {
             res.sort((a,b)=>{
                     return parseInt(a.year)-parseInt(b.year)
                 })
-            return res
-            
+            return res  
         },
         averageScore() {
             if(this.yearScore != null){
@@ -147,7 +146,6 @@ export default {
         }
     },
     mounted: function(){
-        store.commit("getStations");
         store.commit("getGlobalScores");
     }
 }

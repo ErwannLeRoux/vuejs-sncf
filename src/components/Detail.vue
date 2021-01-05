@@ -1,7 +1,7 @@
 <template>
     <div id="main" class="container-fluid pb-4">
-        <HeaderWithSelectYear :text="title" :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear"/>
-        {{yearInfo}}
+        <HeaderWithSelectYear :text="title" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear"/>
+        <ComplianceTracking  :years-list="yearsList" :data-years="dataYears" :good-threshold="95" :bad-threshold="90" />
     </div>
 
 
@@ -10,11 +10,13 @@
 <script>
 import { store } from './../storages/stations.js';
 import HeaderWithSelectYear from './HeaderWithSelectYear.vue';
-
+import ComplianceTracking from './ComplianceTracking.vue';
+ 
 export default {
     name: "Detail",
     components: {
-        HeaderWithSelectYear
+        HeaderWithSelectYear,
+        ComplianceTracking
     },
     props: [
         "query"
@@ -35,9 +37,10 @@ export default {
         stationInfo(){
             this.title = `Détail - Gare de ${this.stationInfo.name}`
             this.currentYear = this.maxYear
-            this.yearsList = this.computeYearList()
+            this.dataYears = this.stationInfo.scores_for_years
         },
         currentYear(){
+            this.yearsList = this.computeYearList()
             this.yearInfo = this.stationInfo.scores_for_years.find(d=>d.year == this.currentYear)
         }
     },
@@ -47,6 +50,7 @@ export default {
             currentYear : null,
             yearsList: null,
             yearInfo: null,
+            dataYears: null,
         };
     },
     methods :{
@@ -80,7 +84,6 @@ export default {
     },
     mounted: function(){
         store.commit("getStation",this.$route.params.id );
-        console.log(this.stationInfo)
     }
 }
 </script>
@@ -91,6 +94,4 @@ export default {
         margin:auto;
         padding:0;
     }
-
-
 </style>
