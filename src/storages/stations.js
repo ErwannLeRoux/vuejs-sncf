@@ -3,13 +3,11 @@ import { createStore } from 'vuex'
 
 export const store = createStore({
     state() {
-        return {
+        return {    
+            regions: [],
+            departments: [],
             stations: [],
             cleanliness: [],
-            handicapFacilities: [],
-            wifiEquipment: [],
-            salesWaitingTime: [],
-            waitingServices: [],
             global_scores: [],
             topStations: [],
             flopStations: [],
@@ -31,18 +29,12 @@ export const store = createStore({
         getCleanliness: (state) => {
             return state.cleanliness
         },
-        getHandicapFacilities: (state) => {
-            return state.handicapFacilities
+        getDepartments: (state) => {
+            return state.departments
         },
-        getWifiEquipment: (state) => {
-            return state.wifiEquipment
-        },
-        getSalesWaitingTime: (state) => {
-            return state.salesWaitingTime
-        },
-        getWaitingServices: (state) => {
-            return state.waitingServices
-        },
+        getRegions: (state) => {
+            return state.departments
+        }
     },
     mutations: {
         getGlobalScores(state) {
@@ -75,60 +67,77 @@ export const store = createStore({
             })
         },
         disconnect(state){
-            state.stations = []
-            state.cleanliness = []
-            state.handicapFacilities = []
-            state.wifiEquipment = []
-            state.salesWaitingTime = []
-            state.waitingServices = []
+            state.regions = []
         },
-        getStations(state) {
-            axios.get("https://data.sncf.com/api/records/1.0/search/?dataset=liste-des-gares&q=&rows=-1")
-            .then((response) => {
-                state.stations = response.data.records
-            }).catch((error) => {
-                console.log(error)
-            });
+        getRegions (state, payload) {
+            axios.get(`http://antoinegonzalez.fr:8081/regions`)
+                .then(result => {
+                    state.regions = result.data.data
+                    this.commit("getDepartments", payload)
+                })
+                .catch(console.error);
         },
-        getCleanliness(state) {
-            axios.get("https://data.sncf.com/api/records/1.0/search/?dataset=proprete-en-gare&q=&rows=-1")
-                .then((response) => {
-                    state.cleanliness = response.data.records
-                }).catch((error) => {
-                console.log(error)
-            });
-        },
-        getHandicapFacilities(state) {
-            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=accompagnement-pmr-gares&rows=-1")
-                .then((response) => {
-                    state.handicapFacilities = response.data.records
-                }).catch((error) => {
-                console.log(error)
-            });
-        },
-        getWifiEquipment(state) {
-            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=gares-equipees-du-wifi&rows=-1")
-                .then((response) => {
-                    state.wifiEquipment = response.data.records
-                }).catch((error) => {
-                console.log(error)
-            });
-        },
-        getSalesWaitingTime(state) {
-            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=attente-au-guichet&rows=-1")
-                .then((response) => {
-                    state.salesWaitingTime = response.data.records
-                }).catch((error) => {
-                console.log(error)
-            });
-        },
-        getWaitingServices(state) {
-            axios.get("https://ressources.data.sncf.com/api/records/1.0/search/?dataset=gares-pianos&q=&rows=-1")
-                .then((response) => {
-                    state.waitingServices = response.data.records
-                }).catch((error) => {
-                console.log(error)
-            });
+        getDepartments (state, payload) {
+
+            axios.get(`http://antoinegonzalez.fr:8081/departments/?region=${payload}`)
+                .then(result => {
+                    state.departments = result.data.data
+                })
+                .catch(console.error);
         },
     },
+    actions: {
+        getStations (context, payload) {
+            let region = 'Normandie'
+            let year   = '2020'
+            let mode   = 'audited-only'
+            let dep    = -1
+
+            if(payload) {
+                if(payload.region_name) region   = payload.region_name
+                if(payload && payload.year) year = payload.year
+                if(payload && payload.mode) mode = payload.mode
+                if(payload && payload.dep)  dep  = payload.dep
+            }
+
+            let queryString = ''
+            if(dep != -1) {
+                queryString = `?year=${year}&mode=${mode}&num_dep=${dep}`
+            } else if(region == 'Toutes les régions') {
+                queryString = `?year=${year}&mode=${mode}`
+            } else {
+                queryString = `?region=${region}&year=${year}&mode=${mode}`
+            }
+
+            let url = `http://localhost:8081/stations/${queryString}`
+
+            return new Promise(( resolve, reject ) => {
+                axios.get(url)
+                    .then(result => {
+                        resolve(result.data.data);
+                    })
+                    .catch((err) => reject(err));
+            });
+        },
+        getRegions (context, payload) {
+          let region = 'Normandie'
+          if(payload && payload.region_name) region = payload.region_name
+          return new Promise(( resolve, reject ) => {
+              axios.get(`http://antoinegonzalez.fr:8081/regions/?region=${region}`)
+                  .then(result => {
+                      resolve(result.data.data[0]);
+                  })
+                  .catch(() => reject());
+          });
+        },
+        getRegionList (context) {
+          return new Promise(( resolve, reject ) => {
+              axios.get(`http://antoinegonzalez.fr:8081/regions`)
+                  .then(result => {
+                      resolve(result.data.data);
+                  })
+                  .catch(() => reject());
+          });
+        }
+    }
 })
