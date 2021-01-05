@@ -1,6 +1,6 @@
 <template>
     <div id="main" class="container-fluid pb-4">
-        <DashboardHeader :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
+        <HeaderWithSelectYear :text="title" :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
         <div class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
             <div class="row">
                 <div class="col-sm-9">
@@ -28,19 +28,20 @@ import { store } from './../storages/stations.js';
 import PercentSpinnerChart from './PercentSpinnerChart.vue'
 import NumericStatBand from './NumericStatBand.vue'
 import ComplianceTracking from './ComplianceTracking.vue'
-import DashboardHeader from './DashboardHeader.vue'
+import HeaderWithSelectYear from './HeaderWithSelectYear.vue'
 import DashboardStationsTop from './DashboardStationsTop.vue'
 export default {
     name: "Dashboard",
     components: {
         PercentSpinnerChart,
         ComplianceTracking,
-        DashboardHeader,
+        HeaderWithSelectYear,
         DashboardStationsTop,
         NumericStatBand
     },
     data() {
         return {
+            title : "Dashboard Année",
             goodThreshold: "95",
             badThreshold: "90",
             currentYear : null,
@@ -55,9 +56,6 @@ export default {
                 years.push(y.year)
             })
             return Math.max(...years)
-        },
-        stations(){
-            return store.getters.getStations.slice(0,5);
         },
         globalScores(){
             return store.getters.getGlobalScores;
@@ -88,7 +86,6 @@ export default {
             
         },
         averageScore() {
-            
             if(this.yearScore != null){
                 return this.yearScore['average_score']
             }else{

@@ -13,6 +13,7 @@ export const store = createStore({
             global_scores: [],
             topStations: [],
             flopStations: [],
+            station: {},
         }
     },
     getters: {
@@ -24,6 +25,9 @@ export const store = createStore({
         },
         getFlopStations: (state) => {
             return state.flopStations
+        },
+        getStation: (state) => {
+            return state.station
         },
         getStations: (state) => {
             return state.stations
@@ -70,6 +74,14 @@ export const store = createStore({
             axios.get(`http://192.168.1.16:8081/worst5?year=${year}`)
             .then((response) => {
                 state.flopStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        getStation(state,uic_code){
+            axios.get(`http://192.168.1.16:8081/station/${uic_code}`)
+            .then((response) => {
+                state.station = response.data.data[0]
             }).catch((error) => {
                 console.log(error)
             })

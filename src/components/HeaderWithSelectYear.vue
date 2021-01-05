@@ -1,6 +1,6 @@
 <template>
    <header class="container-fluid my-4">
-        <h2 id="title">Dashboard Année</h2>
+        <h2 id="title">{{text}}</h2>
         <span id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
@@ -16,11 +16,11 @@
 <script>
 
 export default {
-    name: "DashboardHeader",
+    name: "HeaderWithSelectYear",
     components: {
 
     },
-    props: ["currentYear","yearsList"],
+    props: ["currentYear","yearsList","text"],
     watch:{
         currentYear:{
             deep : true,
@@ -31,7 +31,7 @@ export default {
     },
     data() {
         return {
-            selectedYear: this.currentYear
+            selectedYear: this.currentYear,
         };
     },
     computed:{
