@@ -1,5 +1,15 @@
 <template>
-    <div id="spinnerChartContainer">       
+    <div id="spinnerChartContainer">
+        <svg preserveAspectRatio="xMinYMin meet" :viewBox="'0 0 '+width+' '+height" class="svg-content">
+            <g :transform="'translate('+ (width/2) +','+ (height/2) +')'">
+                <g :key="area.color" v-for="area in pieAreas">
+                    <path :d="dValue(area)" opacity="0.5" :style="'fill:'+area.data.color+';'">
+                    </path>
+                </g>
+                <text text-anchor="middle" font-size="2em" y="5">{{percentValue.toFixed(2)}}%</text>
+                <text text-anchor="middle" font-size="0.6em" y="20">{{caption}}</text>     
+            </g>
+        </svg>
     </div>
 </template>
 
@@ -14,9 +24,10 @@ export default {
     props: ["percentValue", "goodThreshold", "badThreshold", "caption"],
     data() {
         return {
-            width : 300,
-            height : 300,
-            radius : 100
+            width : 200,
+            height : 200,
+            radius : 100,
+            
         };
     },
     computed:{
@@ -28,71 +39,37 @@ export default {
             }else{
                 return "red"
             }
-        }
+        },
+        pieAreas(){
+            let pie = d3.pie()
+                .sort(null)
+                .value(function(d){
+                return d.value
+            })
+            let data = pie([{value:this.percentValue,color:this.color},{value:100-this.percentValue,color:"gray"}])
+            return data
+        },
+        
     },
     methods :{
-      
-    
+        dValue(area){
+            let arc =  d3.arc()
+                .outerRadius(this.radius - 10)
+                .innerRadius(this.radius - 30)
+            return arc(area)
+        }
     },
     mounted: function(){
-        let arc = d3.arc()
-        .outerRadius(this.radius - 10)
-        .innerRadius(this.radius - 30)
-
-        let pie = d3.pie()
-        .sort(null)
-        .value(function(d){
-            return d.value
-        }) 
-
-        let svg = d3.select('#spinnerChartContainer').append("svg")
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 "+this.width+" "+this.height)
-        .classed("svg-content", true)
-        .append("g")
-        .attr("transform", "translate(" + this.width / 2 + "," + this.height / 2 + ")");
-
-        let g = svg.selectAll(".arc")
-        .data(pie([{value:this.percentValue,color:this.color},{value:100-this.percentValue,color:"gray"}]))
-        .enter().append("g")
-
-        g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d){
-            return d.data.color;
-        })
-        .attr("opacity",0.5)
-        
-        g.append("text")
-        .attr("text-anchor","middle")
-        .attr('font-size','3em')
-        .attr('y', 10)
-        .text(this.percentValue + "%");
-
-        g.append("text")
-        .attr("text-anchor","middle")
-        .attr('font-size','0.6em')
-        .attr('y', 30)
-        .text(this.caption);
     }
 }
 </script>
-
+  
 <style scoped>
-    #spinnerChartContainer{
-        display: inline-block;
-        position: relative;
-        max-width: 300px;
-        width: 100%;
-        height : 300px;
-        overflow: hidden;
+  #spinnerChartContainer{
+        width: 80%;
+        margin:auto
     }
 
-    .svg-content {
-        display: inline-block;
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
+
      
 </style>

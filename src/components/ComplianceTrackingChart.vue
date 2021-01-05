@@ -77,7 +77,6 @@ export default {
         dataYears: {
             deep : true,
             handler: function(){
-                console.log(this.dataYears)
                 this.buildGraph()
             } 
         }
@@ -170,7 +169,7 @@ export default {
                     .attr("y", d=> yScale(d.upper))
                     .attr("height", d =>  yScale(d.lower)-yScale(d.upper))
                     .style("fill", d => d.color)
-                    .attr("opacity", 0.1)
+                    .attr("opacity", 0.2)
                 
                 //Creation et ajout des courbes en fonction du dataset    
                 let line = d3.line()
@@ -252,9 +251,9 @@ export default {
                                 .style("display","inherit")
                                 div.transition()        
                                 .duration(200)      
-                                .style("opacity", 0.8)
+                                .style("opacity", 0.9)
                                 .style("display", "inherit")   
-                                div.html("Taux de conformité : <span id='val'>"+ d.value +" %</span>")
+                                div.html("Taux de conformité : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
                                 .style("left", (e.pageX + 10)  + "px")     
                                 .style("top", (e.pageY - 50) + "px");
                                 d3.select("#val")
