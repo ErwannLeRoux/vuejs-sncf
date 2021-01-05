@@ -1,19 +1,60 @@
 <template>
-    <div id="mapContainer" ></div>
-    <select v-model="regionSelected" @change="regionChanged()">
-      <option v-for="option in options" v-bind:key="option.region_name" v-bind:value="option.region_name">
-        {{ option.region_name }}
-      </option>
-    </select>
+    <h3 class="title">{{title}}</h3>
+
+    <div class="station-navigation rounded shadow-sm bg-white">
+        <div class="filter-control rounded shadow-sm bg-white">
+            <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
+            <div class="form-group">
+                <label for="regionSelect">Région : </label>
+                <select id="regionSelect" class="form-control" v-model="regionSelected" @change="displayConfigChanged()">
+                    <option value="Toutes les régions">Toutes les régions</option>
+                    <option v-for="option in options" v-bind:key="option.region_name" v-bind:value="option.region_name">
+                        {{ option.region_name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="depSelect">Département : </label>
+                <select id="depSelect" class="form-control" v-model="selectedDep" @change="displayConfigChanged()">
+                    <option value="-1">Tous les départements</option>
+                    <option v-for="option in dpt" v-bind:key="option.num_dep" v-bind:value="option.num_dep">
+                        {{ option.dep_name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="yearSelect">Année : </label>
+                <select class="form-control" id="yearSelect" v-model="selectedYear" @change="displayConfigChanged()">
+                    <option>2020</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="auditedSelect"> Affichage : </label>
+                <select class="form-control" id="auditedSelect" v-model="stationDisplay" @change="displayConfigChanged()">
+                    <option value="audited-only">Audités seulement</option>
+                    <option value="non-audited-only">Non audités seulement</option>
+                    <option value="all">Toutes les gares</option>
+                </select>
+            </div>
+        </div>
+        <div class="loader" id="loader-1"></div>
+        <div id="mapContainer" class="rounded shadow-sm bg-white"></div>
+    </div>
 </template>
 <script>
     const L = window.L
+
     import {
 
 
-    } from "@vue-leaflet/vue-leaflet";
-    import "leaflet/dist/leaflet.css";
-    import "leaflet/dist/leaflet.js";
+    } from "@vue-leaflet/vue-leaflet"
+    import "leaflet/dist/leaflet.css"
+    import "leaflet/dist/leaflet.js"
     import "leaflet/"
 
     import {store} from "../storages/stations";
@@ -24,27 +65,60 @@
         },
         data() {
             return {
-                regionSelected: 'Normandie',
+                selectedDep: -1,
+                stationDisplay: 'audited-only',
+                selectedYear: '2020',
+                regionSelected: 'Toutes les régions',
                 markers: [],
                 map: null,
                 zoom: 5,
                 iconWidth: 25,
                 iconHeight: 40,
+                errorMessage: ""
             };
         },
         computed: {
             options: function () {
                 return store.getters.getRegions
             },
+            dpt: function() {
+                return store.getters.getDepartments
+            },
+            title: function() {
+                return this.regionSelected + " - "+this.selectedYear
+            }
         },
         methods: {
-            regionChanged: function() {
-                store.dispatch("getStations", {region_name: this.regionSelected}).then((stations) => {
-                    store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
-                        let viewBox = { lat: region.lat, lng: region.lng }
-                        this.buildMap(stations, viewBox, 7, false)
+            displayConfigChanged: function() {
+                this.errorMessage = ""
+                let $spinner = window.$(".loader")
+                let $map     = window.$("#mapContainer")
+
+
+                store.commit("getDepartments", this.regionSelected)
+                let params = { region_name: this.regionSelected, year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
+
+                if((this.stationDisplay == 'non-audited-only' || this.stationDisplay == 'all') && this.regionSelected == 'all') {
+                    // toast error not possible
+                    this.errorMessage = "Ce mode d'affichage est seulement disponible à l'échelle d'une région"
+                } else {
+                    $spinner.show()
+                    $map.hide()
+                    store.dispatch("getStations", params).then((stations) => {
+                        store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
+                            let zoom = 6
+                            let viewBox = {lat: 47.0457155124968, lng: 2.435565234333265 }
+                            if(region) {
+                                zoom = 7
+                                viewBox.lat = region.lat,
+                                    viewBox.lng = region.lng
+                            }
+                            $spinner.hide()
+                            $map.show()
+                            this.buildMap(stations, viewBox, zoom, false)
+                        }).catch(console.error)
                     }).catch(console.error)
-                }).catch(console.error)
+                }
             },
             initMapContext: function () {
                 delete L.Icon.Default.prototype._getIconUrl;
@@ -63,15 +137,15 @@
                 }
                 this.markers = L.layerGroup()
                 this.map = L.map('mapContainer').setView([viewbox.lat, viewbox.lng], zoom);
-                this.tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '',
                 }).addTo(this.map)
 
                 stations.forEach((station) => {
                     let scores = station.scores_for_years
                     let color = 'unknown'
-                    if(scores.length > 0) {
-                        let currentYear = scores.find(y => y.year == '2020')
+                    if(scores && scores.length > 0) {
+                        let currentYear = scores[0]
                         if(currentYear) {
                             let avg = currentYear.average_score
                             if(avg >= 95) {
@@ -93,12 +167,20 @@
                         popupAnchor: [0, -51] // point from which the popup should open relative to the iconAnchor
                     })
 
-                    if(station.wgs_84[0] && station.wgs_84[1] && station.scores_for_years.length != 0) {
+                    if(station.wgs_84[0] && station.wgs_84[1]) {
                         let marker = L.marker([station.wgs_84[0], station.wgs_84[1]], {
                             icon: icon
                         })
 
-                        marker.bindTooltip(station.name).openTooltip();
+                        let libelle = 'Inconnu'
+                        if(station.scores_for_years && station.scores_for_years.length != 0) {
+                            libelle = station.scores_for_years[0].average_score.toFixed(2)
+                        }
+
+                        marker.bindTooltip(`
+                            <b>${station.name}</b> (${station.department})</br>
+                            Conformité : ${libelle}%
+                        `).openTooltip();
                         this.markers.addLayer(marker);
                     }
                 })
@@ -106,12 +188,26 @@
             }
         },
         mounted() {
+            let $spinner = window.$(".loader")
+            let $map     = window.$("#mapContainer")
+
             this.initMapContext()
-            store.commit("getRegions")
-            store.dispatch("getStations", {region_name: this.regionSelected}).then((stations) => {
+            store.commit("getRegions", this.regionSelected)
+            let params = { region_name: this.regionSelected,  year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
+
+            store.dispatch("getStations", params).then((stations) => {
               store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
-                  let viewBox = { lat: region.lat, lng: region.lng }
-                  this.buildMap(stations, viewBox, 7, true)
+                  let zoom = 6
+                  let viewBox = {lat: 47.0457155124968, lng: 2.435565234333265 }
+                  if(region) {
+                      zoom = 7
+                      viewBox.lat = region.lat,
+                          viewBox.lng = region.lng
+                  }
+                  $spinner.hide()
+                  $map.show()
+                  this.buildMap(stations, viewBox, zoom, true)
+
               })
             })
         }
@@ -119,9 +215,91 @@
 </script>
 
 <style scoped>
+    .error-message {
+        color: red;
+    }
+
+    .title {
+        margin-left: 3vw;
+        text-align: left;
+        color: white;
+        margin-top: 3vh;
+    }
+
     #mapContainer {
-        width: 500px;
-        height: 500px;
+        width: 800px;
+        height: 600px;
+        display: none;
+    }
+
+    .station-navigation {
+        padding: 2vw;
+        align-items: center;
+        background-color: white;
+        margin-top: 3vh;
+        display: flex;
+        justify-content: space-around;
+        margin-left: 3vw;
+        margin-right: 3vw;
+        box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+    }
+
+    .filter-control {
+        height: 600px;
+        width: 40vw;
+        margin: 0 2em 2em 2em;
+        display: flex;
+        flex-direction: column;
+        border: 10px solid;
+        border-image-source: linear-gradient( #771F6B, #E21F25);
+        border-image-slice: 1;
+        padding: 2em;
+        border-radius: 10px;
+        box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+    }
+
+    .loader{
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
         margin: 0 auto;
+    }
+
+    #loader-1:before, #loader-1:after{
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        border: 10px solid transparent;
+        border-top-color: #822171;
+    }
+
+    #loader-1:before{
+        z-index: 100;
+        animation: spin 1s infinite;
+    }
+
+    #loader-1:after{
+        border: 10px solid #ccc;
+    }
+
+    @keyframes spin{
+        0%{
+            -webkit-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        100%{
+            -webkit-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
     }
 </style>

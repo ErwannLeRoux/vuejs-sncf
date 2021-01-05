@@ -16,6 +16,7 @@
     "leaflet": "^1.7.1",
     "popper.js": "^1.16.1",
     "semantic-ui-vue": "^0.11.0",
+    "toastr": "^2.1.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.2",
     "vuex": "^4.0.0-rc.2"
@@ -44,7 +45,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-unused-vars": "off" 
+      "no-unused-vars": "off"
     }
   },
   "browserslist": [
