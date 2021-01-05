@@ -63,8 +63,12 @@ export default {
     }
 }
 </script>
-
+  
 <style scoped>
+  #spinnerChartContainer{
+        width: 80%;
+        margin:auto
+    }
 
 
      

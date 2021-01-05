@@ -55,6 +55,10 @@ export default {
         text-align: left;
     }
 
+    .dropdown-menu a:hover{
+        background-color: lightgray;
+    }
+
     label, span {
         margin: 0;
         font-size: 1.5em;

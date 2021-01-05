@@ -251,7 +251,7 @@ export default {
                                 .style("display","inherit")
                                 div.transition()        
                                 .duration(200)      
-                                .style("opacity", 0.8)
+                                .style("opacity", 0.9)
                                 .style("display", "inherit")   
                                 div.html("Taux de conformité : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
                                 .style("left", (e.pageX + 10)  + "px")     

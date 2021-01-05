@@ -29,11 +29,13 @@ export default {
     data() {
         return {
             fiveBest : {
-                title : "Nos 5 meilleures Gares",
+                title : "Top 5 de nos gares les plus conformes",
+                tip: "Gares auditées ayant obtenues les meilleurs taux de conformités",
                 color : "green",    
             },
             fiveWorst : {
-                title : "Nos 5 plus mauvaises Gares",
+                title : "Top 5 de nos gares les moins conformes",
+                tip: "Gares auditées ayant obtenues les moins bons taux de conformités",
                 color : "red",
             },
         };

@@ -13,14 +13,20 @@
                 <svg class="legend-item-svg" width="1em" height="1em">
                     <circle class='area-legend' cx="0.5em" cy="0.5em" r="0.5em" :style="'fill:'+ area.color"></circle>    
                 </svg>
-                {{area.label}}
+                 <a class="tip" data-toggle="tooltip" :title="area.tip">{{area.label}}</a>
             </span>
         </div>
     </div>
 </template>
 
 <script>
+    import jQuery from "jquery";
+    const $ = jQuery;
+    window.$ = $;
 
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 
     export default {
         name: "ComplianceTrackingLegend",
@@ -32,20 +38,30 @@
                 areas : [
                     {
                         color: "green",
-                        label: "Taux de conformités correctes"
+                        label: "Taux de conformités excellents",
+                        tip: "Taux supérieur égal à 95%"
                     },
                     {
                         color: "orange",
-                        label: "Taux de conformités passables"        
+                        label: "Taux de conformités passables",
+                        tip: "Taux compris entre 90 et 95%"    
                     },
                     {
                         color : "red",
-                        label: "Taux de conformités rejetés",
+                        label: "Taux de conformités médiocres",
+                        tip: "Taux inférieur à 90%"
                     },
                 ],
             }  
         },
         props: ["lines"],
+        watch:{
+            line(){
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
+            } 
+        },
         computed:{
         
         },
@@ -63,7 +79,12 @@
     #complianceTrackingLegend{
         text-align: left;
     }
-
+    .tip{
+        text-decoration: underline;
+        color: inherit;
+        cursor:pointer;
+        
+    }
 </style>
 
 
