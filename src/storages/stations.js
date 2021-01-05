@@ -3,20 +3,69 @@ import { createStore } from 'vuex'
 
 export const store = createStore({
     state() {
-        return {
+        return {    
             regions: [],
             departments: [],
+            stations: [],
+            cleanliness: [],
+            global_scores: [],
+            topStations: [],
+            flopStations: [],
         }
     },
     getters: {
-        getRegions: (state) => {
-            return state.regions
+        getGlobalScores: (state) => {
+            return state.global_scores
+        },
+        getTopStations: (state) => {
+            return state.topStations
+        },
+        getFlopStations: (state) => {
+            return state.flopStations
+        },
+        getStations: (state) => {
+            return state.stations
+        },
+        getCleanliness: (state) => {
+            return state.cleanliness
         },
         getDepartments: (state) => {
+            return state.departments
+        },
+        getRegions: (state) => {
             return state.departments
         }
     },
     mutations: {
+        getGlobalScores(state) {
+            axios.get("http://192.168.1.16:8081/global_scores")
+            .then((response) => {
+                response.data.data.forEach((year) => {
+                    year.data.sort((a,b) => {
+                        return parseInt(a.month) - parseInt(b.month)
+                    })
+                });
+                state.global_scores = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            });
+        },
+        getTopStations(state,year){
+            axios.get(`http://192.168.1.16:8081/top5?year=${year}`)
+            .then((response) => {
+                state.topStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        getFlopStations(state,year){
+            axios.get(`http://192.168.1.16:8081/worst5?year=${year}`)
+            .then((response) => {
+                state.flopStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
         disconnect(state){
             state.regions = []
         },
