@@ -242,6 +242,7 @@
         margin-left: 3vw;
         margin-right: 3vw;
         box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+        margin-bottom: 30px;
     }
 
     .filter-control {

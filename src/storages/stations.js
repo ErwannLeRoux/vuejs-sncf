@@ -6,6 +6,7 @@ export const store = createStore({
         return {
             regions: [],
             departments: [],
+            stations: []
         }
     },
     getters: {
@@ -14,7 +15,10 @@ export const store = createStore({
         },
         getDepartments: (state) => {
             return state.departments
-        }
+        },
+        getStations: (state) => {
+            return state.stations
+        },
     },
     mutations: {
         disconnect(state){
@@ -36,6 +40,15 @@ export const store = createStore({
                 })
                 .catch(console.error);
         },
+        getStations(state, payload) {
+
+            axios.get("http://localhost:8081/stations")
+                .then(result => {
+                    state.stations = result.data.data
+                })
+                .catch(console.error);
+
+        }
     },
     actions: {
         getStations (context, payload) {

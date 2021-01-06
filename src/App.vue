@@ -22,18 +22,16 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  background: linear-gradient(#822171, #DF1C26);
-  height: 100%;
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    padding-bottom: 30px;
+    background: linear-gradient(#822171, #DF1C26);
+    min-height: 100vh;
+  }
 
-html, body {
-  width: 100vw;
-  height: 100vh;
-}
+  body, html {   min-height: 100%; }
+
 </style>
