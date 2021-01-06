@@ -1,7 +1,7 @@
 <template>
    <header class="container-fluid my-4">
         <h2 id="title">{{text}}</h2>
-        <span id="select-year" class="dropdown show ">
+        <span v-if="!displaySelect" id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
             </a>
@@ -35,6 +35,9 @@ export default {
         };
     },
     computed:{
+        displaySelect(){
+            return this.yearsList.length == 0
+        } 
       
     },
     methods :{
@@ -70,5 +73,6 @@ export default {
 
     #title{
         display: inline-block;
+        color: white;
     }
 </style>

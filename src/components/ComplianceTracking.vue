@@ -1,8 +1,8 @@
 <template>
     <div class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
-        <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
-        <ComplianceTrackingLegend :lines="legendData" />
+        <ComplianceTrackingChart  :data-years="graphData" :good-threshold="goodThreshold" :bad-threshold="badThreshold" @legendChange="actualizeLegendData" /> 
+        <ComplianceTrackingLegend :lines="legendData" />    
     </div>    
 </template>
 
@@ -20,13 +20,11 @@
         },
         data() {
             return {
-                goodTreshold: 95,
-                badTreshold: 90,
                 graphData: [],
                 legendData: []
             };
         },
-        props: ["dataYears", "yearsList"],
+        props: ["dataYears", "yearsList", "goodThreshold", "badThreshold" ],
         watch : { 
             dataYears: {
                 deep : true,

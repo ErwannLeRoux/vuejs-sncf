@@ -13,12 +13,11 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         <DashboardStationsTop :year="currentYear" />
         <div class="container-fluid mt-5 p-0">
             <h4 id="chart-title">Suivi du taux de conformité moyen de la SNCF à l'année</h4>
-            <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" />
+            <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" :good-threshold="goodThreshold" :bad-threshold="badThreshold" />
         </div>
     </div>
 </template>
@@ -81,7 +80,7 @@ export default {
             })
             res.sort((a,b)=>{
                     return parseInt(a.year)-parseInt(b.year)
-                })
+            })
             return res  
         },
         averageScore() {
