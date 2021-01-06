@@ -293,6 +293,7 @@ export default {
 
 <style>
     #score-tooltip{
+        display: none;
         background-color: black;
         color:white;
         padding: 1em;

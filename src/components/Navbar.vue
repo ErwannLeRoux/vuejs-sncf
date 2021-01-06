@@ -37,7 +37,7 @@ export default {
         {
           id : 2,
           label : "Gares",
-          location : "/gares",
+          location : "/map",
         }
       ]
         };

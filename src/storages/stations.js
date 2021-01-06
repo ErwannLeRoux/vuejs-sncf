@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { createStore } from 'vuex'
 
+const API_HOST = process.env.VUE_APP_API_HOST
+const API_PORT = process.env.VUE_APP_API_PORT
+
 export const store = createStore({
     state() {
         return {    
@@ -33,12 +36,12 @@ export const store = createStore({
             return state.departments
         },
         getRegions: (state) => {
-            return state.departments
+            return state.regions
         }
     },
     mutations: {
         getGlobalScores(state) {
-            axios.get("http://192.168.1.16:8081/global_scores")
+            axios.get(`${API_HOST}:${API_PORT}/global_scores`)
             .then((response) => {
                 response.data.data.forEach((year) => {
                     year.data.sort((a,b) => {
@@ -51,7 +54,7 @@ export const store = createStore({
             });
         },
         getTopStations(state,year){
-            axios.get(`http://192.168.1.16:8081/top5?year=${year}`)
+            axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
             .then((response) => {
                 state.topStations = response.data.data
             }).catch((error) => {
@@ -59,7 +62,7 @@ export const store = createStore({
             })
         },
         getFlopStations(state,year){
-            axios.get(`http://192.168.1.16:8081/worst5?year=${year}`)
+            axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
             .then((response) => {
                 state.flopStations = response.data.data
             }).catch((error) => {
@@ -70,7 +73,7 @@ export const store = createStore({
             state.regions = []
         },
         getRegions (state, payload) {
-            axios.get(`http://antoinegonzalez.fr:8081/regions`)
+            axios.get(`${API_HOST}:${API_PORT}/regions`)
                 .then(result => {
                     state.regions = result.data.data
                     this.commit("getDepartments", payload)
@@ -79,7 +82,7 @@ export const store = createStore({
         },
         getDepartments (state, payload) {
 
-            axios.get(`http://antoinegonzalez.fr:8081/departments/?region=${payload}`)
+            axios.get(`${API_HOST}:${API_PORT}/departments/?region=${payload}`)
                 .then(result => {
                     state.departments = result.data.data
                 })
@@ -109,7 +112,7 @@ export const store = createStore({
                 queryString = `?region=${region}&year=${year}&mode=${mode}`
             }
 
-            let url = `http://localhost:8081/stations/${queryString}`
+            let url = `${API_HOST}:${API_PORT}/stations/${queryString}`
 
             return new Promise(( resolve, reject ) => {
                 axios.get(url)
@@ -123,7 +126,7 @@ export const store = createStore({
           let region = 'Normandie'
           if(payload && payload.region_name) region = payload.region_name
           return new Promise(( resolve, reject ) => {
-              axios.get(`http://antoinegonzalez.fr:8081/regions/?region=${region}`)
+              axios.get(`${API_HOST}:${API_PORT}/regions/?region=${region}`)
                   .then(result => {
                       resolve(result.data.data[0]);
                   })
@@ -132,7 +135,7 @@ export const store = createStore({
         },
         getRegionList (context) {
           return new Promise(( resolve, reject ) => {
-              axios.get(`http://antoinegonzalez.fr:8081/regions`)
+              axios.get(`${API_HOST}:${API_PORT}/regions`)
                   .then(result => {
                       resolve(result.data.data);
                   })

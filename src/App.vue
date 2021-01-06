@@ -22,18 +22,15 @@ export default {
 
 <style>
 #app {
-  background: linear-gradient(#822171, #DF1C26);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: linear-gradient(#822171, #DF1C26);
   height: 100%;
+  padding-bottom: 30px;
+ background: linear-gradient(#822171, #DF1C26);
 }
 
-html, body {
-  width: 100vw;
-  height: 100vh;
-}
+body, html, #app {   min-height: 100%; }
 
 </style>

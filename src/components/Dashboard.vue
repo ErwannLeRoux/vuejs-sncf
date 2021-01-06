@@ -56,9 +56,6 @@ export default {
             })
             return Math.max(...years)
         },
-        stations(){
-            return store.getters.getStations.slice(0,5);
-        },
         globalScores(){
             return store.getters.getGlobalScores;
         },
@@ -150,7 +147,6 @@ export default {
         }
     },
     mounted: function(){
-        store.commit("getStations");
         store.commit("getGlobalScores");
     }
 }
@@ -161,6 +157,7 @@ export default {
         width:85%;
         margin:auto;
         padding:0;
+        color:white;
     }
     #main-infos{
         color:#2c3e50
