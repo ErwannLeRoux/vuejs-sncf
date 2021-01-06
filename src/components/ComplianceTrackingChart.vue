@@ -17,7 +17,7 @@ export default {
                 top: 20,
                 right: 10,
                 bottom: 20,
-                left: 40
+                left: 50
             },
             monthMap : {
                 "01" : "Janvier",
@@ -33,7 +33,7 @@ export default {
                 "11" : "Novembre",
                 "12" : "Décembre",
             },
-            minY : 90
+            minY : 100,
         };
     },
     props: ["dataYears","goodThreshold", "badThreshold"],
@@ -54,23 +54,43 @@ export default {
             return "translate(" + this.margin.left + "," + this.margin.top + ")"       
         },
         area(){
-            return [
-                {
+            let res = []
+            if(this.minY > this.goodThreshold){
+                res.push({
                     lower : this.minY,
-                    upper: this.badThreshold,
-                    color: "red"
-                },
-                {
-                    lower : this.badThreshold,
-                    upper: this.goodThreshold,
-                    color: "orange"                
-                },
-                {
-                    lower : this.goodThreshold,
-                    upper: 100,
+                    upper : 100,
                     color : "green"
-                },
-            ]
+                })
+            }else if(this.minY >= this.badThreshold  && this.minY < this.goodThreshold ){
+                res.push({
+                    lower : this.goodThreshold,
+                    upper : 100,
+                    color : "green"
+                })
+                res.push({
+                    lower : this.minY,
+                    upper : this.goodThreshold,
+                    color : "orange"
+                })
+            }else{
+                res.push({
+                    lower : this.goodThreshold,
+                    upper : 100,
+                    color : "green"
+                })
+                res.push({
+                    lower : this.badThreshold,
+                    upper : this.goodThreshold,
+                    color : "orange"
+                })
+                res.push({
+                    lower : this.minY,
+                    upper : this.badThreshold,
+                    color : "red"
+                })
+            }
+
+            return res
         }
     },
     watch: {
@@ -90,6 +110,23 @@ export default {
             }else{
                 return "red"
             }
+        },
+        fillTooltip(div,d,e){
+            if(!d.total_checkpoints || !d.not_conform_number){
+                div.html("Taux de conformité moyen : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
+                .style("left", (e.pageX + 10)  + "px")     
+                .style("top", (e.pageY - 50) + "px");    
+            }else{
+                div.html(`
+                    <p>Taux de conformité : <span id='val'> ${d.value.toFixed(2)} %</span></p>
+                    <p>Nombres d'observations : ${d.total_checkpoints}</p>
+                    <p>Nombres de non-conformitées : ${d.not_conform_number}</p>
+                    
+                `)
+                .style("left", (e.pageX + 10)  + "px")     
+                .style("top", (e.pageY - 50) + "px");
+            }
+             
         },
         buildGraph(){
             let self = this
@@ -121,17 +158,27 @@ export default {
 
                 xScale.domain(["Janvier","Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"])
 
-                
+
+                if(self.dataYears.filter(d => d.display == true).length == 0){
+                    self.minY = 86
+                }else{
+                    self.minY = 100
+                }
+
                 let color = d3.scaleOrdinal(d3.schemeDark2);
                 self.dataYears.forEach((year,i) => {
                     year.color = color(i)
+                })
+
+                self.dataYears.filter(d => d.display == true).forEach((year) => {
                     let yearScore = year.values.map((x) => x.value )
                     let minScore = Math.min(...yearScore)
                     if(minScore <= self.minY ){
                         self.minY = minScore
                     }
                 })
-
+                
+                self.minY = self.minY-1         
                 yScale.domain([self.minY,100])
 
                 //Creation et ajout des axes
@@ -153,7 +200,7 @@ export default {
                 d3.select("#y-axis")
                     .append("text")
                     .attr("fill", "currentColor")
-                    .attr("transform", "translate(-30,110) rotate(-90)")
+                    .attr("transform", "translate(-40,110) rotate(-90)")
                     .text("Taux de conformité ( en % )")
 
                 //Creation des ajouts des zones en arriere plan
@@ -168,7 +215,7 @@ export default {
                     .attr("y", d=> yScale(d.upper))
                     .attr("height", d =>  yScale(d.lower)-yScale(d.upper))
                     .style("fill", d => d.color)
-                    .attr("opacity", 0.2)
+                    .attr("opacity", 0.15)
                 
                 //Creation et ajout des courbes en fonction du dataset    
                 let line = d3.line()
@@ -204,7 +251,7 @@ export default {
                 svg.append("g")
                     .attr("id","month-lines")
                     .selectAll(".line-month")
-                    .data(self.dataYears[0].values.map((d) => d.month))
+                    .data(Object.keys(self.monthMap))
                     .enter()
                     .append("line")
                     .attr("class","line-month")
@@ -231,6 +278,11 @@ export default {
                         }else{
                             display = "none"
                         }
+                        dy.values.forEach((v) => {
+                            if(dy.display){
+                               d3.select(`#line-month-${v.month}`).style("display","inherit")
+                            }
+                        })
                         d3.select(this).selectAll("circle")
                             .data(dy.values)
                             .enter()
@@ -246,23 +298,23 @@ export default {
                                 d3.select(this)
                                 .style("opacity", 1)
                                 .style("cursor", "pointer")
-                                d3.select("#line-month-"+d.month)
-                                .style("display","inherit")
+                                /*d3.select("#line-month-"+d.month)
+                                .style("display","inherit")*/
+
                                 div.transition()        
                                 .duration(200)      
                                 .style("opacity", 0.8)
                                 .style("display", "inherit")   
-                                div.html("Taux de conformité : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
-                                .style("left", (e.pageX + 10)  + "px")     
-                                .style("top", (e.pageY - 50) + "px");
+
+                                self.fillTooltip(div,d,e)
+
                                 d3.select("#val")
                                 .style("color", self.getValueColor(d.value))
-                                
                             })
-                            .on("mouseout", function (e, d) {
+                            .on("mouseout", function () {
                                 d3.select(this).style("opacity", 0.7)
-                                d3.select("#line-month-"+d.month)
-                                .style("display","none")
+                                /*d3.select("#line-month-"+d.month)
+                                .style("display","none")*/
                                 div.transition()        
                                 .duration(200)      
                                 .style("opacity", 0)
@@ -286,6 +338,7 @@ export default {
         }
     },
     mounted: function(){
+        this.buildGraph()
     }
 }
 </script>
@@ -297,6 +350,10 @@ export default {
         padding: 1em;
         border-radius: 5px;
     }
+
+    #score-tooltip p{
+        margin:0
+    }
     
 </style>
 
@@ -306,7 +363,6 @@ export default {
         display: inline-block;
         position: relative;
         width: 100%;
-        /*max-width: 600px;*/
         overflow: hidden;
     }
     

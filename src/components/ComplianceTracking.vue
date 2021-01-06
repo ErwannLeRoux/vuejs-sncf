@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
+    <div v-if="yearsList.length != 0" class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
         <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="goodThreshold" :bad-threshold="badThreshold" @legendChange="actualizeLegendData" /> 
         <ComplianceTrackingLegend :lines="legendData" />    
@@ -24,7 +24,7 @@
                 legendData: []
             };
         },
-        props: ["dataYears", "yearsList", "goodThreshold", "badThreshold" ],
+        props: ["dataYears", "yearsList", "goodThreshold", "badThreshold"],
         watch : { 
             dataYears: {
                 deep : true,

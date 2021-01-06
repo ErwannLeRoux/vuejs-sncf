@@ -1,6 +1,6 @@
 <template>
     <div id="main" class="container-fluid pb-4">
-        <HeaderWithSelectYear :text="title" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear" />
+        <HeaderWithSelectYear :title="title" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear" />
         <div class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
             <div class="row">
                 <div class="col-sm-9">

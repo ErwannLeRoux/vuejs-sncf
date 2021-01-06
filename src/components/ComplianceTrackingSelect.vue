@@ -38,7 +38,7 @@
             }
         },
         mounted: function(){
-            
+            this.selectedYears = [this.yearsList.find( y => y.select == true).year]
         }
     }
 </script>

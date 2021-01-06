@@ -1,15 +1,15 @@
 <template>
    <header class="container-fluid my-4">
-        <h2 id="title">{{text}}</h2>
+        <h2 id="title">{{title}}</h2>
         <span v-if="!displaySelect" id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
             </a>
-
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="#" :key="item.year" v-for="item in yearsList" @click="select(item)">{{item.year}}</a>    
             </div>
         </span>
+        <h4 id="subtitle" v-if="subtitle">{{subtitle}}</h4>
    </header>
 </template>
 
@@ -20,7 +20,7 @@ export default {
     components: {
 
     },
-    props: ["currentYear","yearsList","text"],
+    props: ["currentYear","yearsList","title","subtitle"],
     watch:{
         currentYear:{
             deep : true,
@@ -71,8 +71,10 @@ export default {
         margin-left: 0.5em;
     }
 
-    #title{
+    #title {
         display: inline-block;
+    }
+    #title, #subtitle{
         color: white;
     }
 </style>
