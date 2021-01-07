@@ -1,8 +1,8 @@
 <template>
-    <div class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
-        <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
-        <ComplianceTrackingChart  :data-years="graphData" :good-threshold="95" :bad-threshold="90" @legendChange="actualizeLegendData" /> 
-        <ComplianceTrackingLegend :lines="legendData" /> 
+    <div v-if="yearsList.length != 0" class="rounded shadow-sm bg-white" id="complianceTracking">
+        <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange" />
+        <ComplianceTrackingChart  :data-years="graphData" :good-threshold="goodThreshold" :bad-threshold="badThreshold" @legendChange="actualizeLegendData" /> 
+        <ComplianceTrackingLegend :lines="legendData" />    
     </div>    
 </template>
 
@@ -20,19 +20,17 @@
         },
         data() {
             return {
-                goodTreshold: 95,
-                badTreshold: 90,
                 graphData: [],
                 legendData: []
             };
         },
-        props: ["dataYears", "yearsList"],
-        watch : {
+        props: ["dataYears", "yearsList", "goodThreshold", "badThreshold"],
+        watch : { 
             dataYears: {
                 deep : true,
                 handler: function(){
-                    this.graphData = this.initializeGraph()
-                } 
+                    this.graphData = this.initializeGraphData()
+                }
             },
             yearsList : {
                 deep : true,
@@ -54,14 +52,14 @@
             selectionChange(selections){
                 this.actualizeGraphData(selections)
             },
-            initializeGraph(){
+            initializeGraphData(){
                 let res = []
                 this.dataYears.forEach((y) => {
                     let selectedYear = this.yearsList.find(d => d.select == true)
                     res.push({
                         year: y.year,
                         values : y.data,
-                        display : (selectedYear.year == y.year)
+                        display : (y.year == selectedYear.year)
                     })
                 })
                 return res
@@ -84,6 +82,7 @@
 <style scoped>
     #complianceTracking{
         color:#2c3e50;
+        padding: 2em 0em;
     }
 </style>
 

@@ -14,6 +14,7 @@ export const store = createStore({
             global_scores: [],
             topStations: [],
             flopStations: [],
+            station: {},
         }
     },
     getters: {
@@ -25,6 +26,9 @@ export const store = createStore({
         },
         getFlopStations: (state) => {
             return state.flopStations
+        },
+        getStation: (state) => {
+            return state.station
         },
         getStations: (state) => {
             return state.stations
@@ -65,6 +69,20 @@ export const store = createStore({
             axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
             .then((response) => {
                 state.flopStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        getStation(state,uic_code){
+            axios.get(`http://192.168.1.16:8081/station/${uic_code}`)
+            .then((response) => {
+                response.data.data[0].scores_for_years.forEach((d) => {
+                    d.data.sort((a,b) => {
+                        return parseInt(a.month) - parseInt(b.month) 
+                    })
+                    
+                })
+                state.station = response.data.data[0]
             }).catch((error) => {
                 console.log(error)
             })

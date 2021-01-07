@@ -1,13 +1,17 @@
 <template>
-    <div id="container-fluid" class="my-2">
-        <div class="row">
-            <div class="col-sm my-2">
-                <Topfivetab :year="year" :info="fiveBest" :stations-list="topStations" />
-            </div>
-            <div class="col-sm my-2 col-sm-offset-2">
-                <Topfivetab :year="year" :info="fiveWorst" :stations-list="flopStations" /> 
-            </div>
-        </div>
+    <div>
+        <h3 class="title">
+            <a class="tip title" data-toggle="tooltip" title="Gares auditées ayant obtenues les meilleurs taux de conformités">
+                Top 5 de nos gares les plus conformes
+            </a>
+        </h3>
+        <Topfivetab :year="year" :stations-list="topStations" />
+        <h3 class="title">
+            <a class="tip title" data-toggle="tooltip" title="Gares auditées ayant obtenues les moins bons taux de conformités">
+                Top 5 de nos gares les moins conformes
+            </a>
+        </h3>
+        <Topfivetab :year="year" :stations-list="flopStations" /> 
     </div>
 </template>
 
@@ -27,18 +31,6 @@ export default {
         }
     },
     data() {
-        return {
-            fiveBest : {
-                title : "Top 5 de nos gares les plus conformes",
-                tip: "Gares auditées ayant obtenues les meilleurs taux de conformités",
-                color : "green",    
-            },
-            fiveWorst : {
-                title : "Top 5 de nos gares les moins conformes",
-                tip: "Gares auditées ayant obtenues les moins bons taux de conformités",
-                color : "red",
-            },
-        };
     },
     computed:{
         topStations(){
@@ -49,13 +41,25 @@ export default {
         }
     },
     mounted: function(){
-        store.commit("getGlobalScores");
     }
 }
 </script>
 
 <style scoped>
-    #container{
-        color : #2c3e50;
+    .title{
+        text-align: left;
+        margin:1em 0em 0.5em 0em;
+        padding:0;
     }
+
+    .title a{
+        color: white;
+        text-decoration: none;
+    }
+
+    .title a:hover{
+        cursor:pointer;
+    }
+
+
 </style>

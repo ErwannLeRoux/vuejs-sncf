@@ -76,14 +76,10 @@
     .area-legend{
         opacity : 0.5;
     }
-    #complianceTrackingLegend{
-        text-align: left;
-    }
     .tip{
         text-decoration: underline;
         color: inherit;
         cursor:pointer;
-        
     }
 </style>
 

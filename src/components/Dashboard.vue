@@ -1,25 +1,23 @@
 <template>
     <div id="main" class="container-fluid pb-4">
-        <DashboardHeader :currentYear="currentYear" :yearsList="yearsList" @selectChange="modifyCurrentYear" />
-        <div class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
+        <HeaderWithSelectYear :title="title" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear" />
+        <h3 class="title">État global sur la propreté des gares de la SNCF</h3>
+        <div class="container-fluid rounded shadow-sm bg-white" id="main-infos">
             <div class="row">
                 <div class="col-sm-9">
-                    <h3 id="stat-title">État global sur la propreté des gares de la SNCF</h3>
                     <NumericStatBand :stats="NumericStat" :year="currentYear"/>
                 </div>
                 <div class="col-sm">
                     <div id="spinner">
-                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" /> 
+                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité global'" /> 
                     </div>
                 </div>
             </div>
-            
         </div>
         <DashboardStationsTop :year="currentYear" />
-        <div class="container-fluid mt-5 p-0">
-            <h4 id="chart-title">Suivi du taux de conformité moyen de la SNCF à l'année</h4>
-            <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" />
-        </div>
+        <h3 class="title">Suivi annuel du taux de conformité</h3>
+        <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" :good-threshold="goodThreshold" :bad-threshold="badThreshold" />
+        
     </div>
 </template>
 
@@ -28,19 +26,20 @@ import { store } from './../storages/stations.js';
 import PercentSpinnerChart from './PercentSpinnerChart.vue'
 import NumericStatBand from './NumericStatBand.vue'
 import ComplianceTracking from './ComplianceTracking.vue'
-import DashboardHeader from './DashboardHeader.vue'
+import HeaderWithSelectYear from './HeaderWithSelectYear.vue'
 import DashboardStationsTop from './DashboardStationsTop.vue'
 export default {
     name: "Dashboard",
     components: {
         PercentSpinnerChart,
         ComplianceTracking,
-        DashboardHeader,
+        HeaderWithSelectYear,
         DashboardStationsTop,
         NumericStatBand
     },
     data() {
         return {
+            title : "Dashboard Année",
             goodThreshold: "95",
             badThreshold: "90",
             currentYear : null,
@@ -80,12 +79,10 @@ export default {
             })
             res.sort((a,b)=>{
                     return parseInt(a.year)-parseInt(b.year)
-                })
-            return res
-            
+            })
+            return res  
         },
         averageScore() {
-            
             if(this.yearScore != null){
                 return this.yearScore['average_score']
             }else{
@@ -153,6 +150,22 @@ export default {
 </script>
 
 <style scoped>
+    .title{
+        text-align: left;
+        margin:1em 0em 0.5em 0em;
+        padding:0;
+    }
+
+    .title a{
+        color: white;
+        text-decoration: none;
+    }
+
+    .title a:hover{
+        cursor:pointer;
+    }
+
+
     #main {
         width:85%;
         margin:auto;
