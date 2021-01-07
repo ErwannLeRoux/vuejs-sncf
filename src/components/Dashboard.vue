@@ -167,6 +167,7 @@ export default {
         padding:0;
         color:white;
     }
+    
     #main-infos{
         color:#2c3e50
     }

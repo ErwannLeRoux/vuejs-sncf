@@ -157,7 +157,7 @@ export default {
 
 <style scoped>
     #main,#loader-container  {
-        width:85%;
+        width:95%;
         margin:auto;
         padding:0;
     }
