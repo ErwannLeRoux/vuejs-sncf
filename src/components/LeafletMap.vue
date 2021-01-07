@@ -1,6 +1,5 @@
 <template>
     <h3 class="title">{{title}}</h3>
-
     <div class="station-navigation rounded shadow-sm bg-white">
         <div v-show="!onLoad" class="filter-control rounded shadow-sm bg-white">
             <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
@@ -45,7 +44,6 @@
         <div v-show="!onLoad" id="mapContainer" class="rounded shadow-sm bg-white" ></div>
         <div v-if="onLoad" class="loader" id="loader-1"></div>
     </div>
-
 </template>
 <script>
     const L = window.L
@@ -165,13 +163,16 @@
                         iconUrl: require(`../assets/images/marker-${color}/marker-icon.png`),
                         shadowUrl: require(`../assets/images/marker-shadow.png`),
                         iconSize: [25, 41], // size of the icon
-                        iconAnchor: [0, 21], // point of the icon which will correspond to marker's location
-                        popupAnchor: [0, -51] // point from which the popup should open relative to the iconAnchor
+                        iconAnchor: [0, 30], // point of the icon which will correspond to marker's location
+                        popupAnchor: [50, 50] // point from which the popup should open relative to the iconAnchor
                     })
 
                     if(station.wgs_84[0] && station.wgs_84[1]) {
                         let marker = L.marker([station.wgs_84[0], station.wgs_84[1]], {
                             icon: icon
+                        })
+                        marker.on('click', () => {
+                            this.$router.push(`/detail/${station.uic_code}`)
                         })
 
                         let libelle = 'Inconnu'
