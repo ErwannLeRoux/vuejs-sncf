@@ -314,6 +314,9 @@
             }
         },
         mounted() {
+            if(localStorage.stations) {
+                this.onLoad = false
+            }
             store.commit("getStations")
             store.commit("getDepartments")
             store.commit("getRegions", this.regionSelected)
