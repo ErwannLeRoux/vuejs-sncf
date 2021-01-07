@@ -90,7 +90,6 @@ export const store = createStore({
                     d.data.sort((a,b) => {
                         return parseInt(a.month) - parseInt(b.month)
                     })
-
                 })
                 state.station = response.data.data[0]
             }).catch((error) => {
@@ -153,24 +152,42 @@ export const store = createStore({
                 if(payload && payload.dep)  dep  = payload.dep
             }
 
-            let queryString = ''
-            if(dep != -1) {
-                queryString = `?year=${year}&mode=${mode}&num_dep=${dep}`
-            } else if(region == 'Toutes les régions') {
-                queryString = `?year=${year}&mode=${mode}`
-            } else {
-                queryString = `?region=${region}&year=${year}&mode=${mode}`
-            }
-
-            let url = `${API_HOST}:${API_PORT}/stations/${queryString}`
-
-            return new Promise(( resolve, reject ) => {
-                axios.get(url)
-                    .then(result => {
-                        resolve(result.data.data);
+            if(region == 'Toutes les régions' && dep == -1 && mode == 'audited-only' && year == 2020) {
+                if (localStorage.defaultMapConfig) {
+                    return new Promise((resolve, reject) => {
+                        resolve(JSON.parse(localStorage.getItem('defaultMapConfig')))
                     })
-                    .catch((err) => reject(err));
-            });
+                } else {
+
+                    return new Promise(( resolve, reject ) => {
+                        axios.get(`${API_HOST}:${API_PORT}/stations/?year=${year}&mode=${mode}`)
+                            .then(result => {
+                                localStorage.setItem('defaultMapConfig', JSON.stringify(result.data.data))
+                                resolve(result.data.data);
+                            })
+                            .catch((err) => reject(err));
+                    });
+                }
+            } else {
+                let queryString = ''
+                if(dep != -1) {
+                    queryString = `?year=${year}&mode=${mode}&num_dep=${dep}`
+                } else if(region == 'Toutes les régions') {
+                    queryString = `?year=${year}&mode=${mode}`
+                } else {
+                    queryString = `?region=${region}&year=${year}&mode=${mode}`
+                }
+
+                let url = `${API_HOST}:${API_PORT}/stations/${queryString}`
+
+                return new Promise(( resolve, reject ) => {
+                    axios.get(url)
+                        .then(result => {
+                            resolve(result.data.data);
+                        })
+                        .catch((err) => reject(err));
+                });
+            }
         },
         getRegions (context, payload) {
           let region = 'Normandie'
