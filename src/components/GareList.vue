@@ -1,6 +1,6 @@
 <template>
     <header>
-        <h1 class="list-title">Liste des Gares</h1>
+        <h1 class="title">Liste des Gares</h1>
     </header>
     <div id="container" class="rounded shadow-sm bg-light px-2 py-4">
         <div v-if="!onLoad " id="station-list-container">
@@ -331,7 +331,7 @@
         margin: 2em 3vw 4em;
     }
 
-    .list-title {
+    .title {
         color:white;
         text-align: left;
     }
@@ -432,6 +432,12 @@
         text-decoration: underline;
         color: inherit;
         cursor:pointer;
+    }
+
+    @media screen and (max-width: 1000px) {
+        .title{
+            text-align: center;
+        }
     }
 
 </style>

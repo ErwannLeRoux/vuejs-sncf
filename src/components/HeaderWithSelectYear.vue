@@ -1,15 +1,16 @@
 <template>
    <header class="container-fluid">
         <h1 id="title">{{title}}</h1>
-        <span v-if="!displaySelect" id="select-year" class="dropdown show ">
+        <h3 id="subtitle" v-if="subtitle">{{subtitle}}</h3>
+        <div v-if="!displaySelect" id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="#" :key="item.year" v-for="item in yearsList" @click="select(item)">{{item.year}}</a>    
             </div>
-        </span>
-        <h3 id="subtitle" v-if="subtitle">{{subtitle}}</h3>
+        </div>
+        
    </header>
 </template>
 
@@ -78,5 +79,17 @@ export default {
     }
     #title, #subtitle{
         color: white;
+    }
+
+    @media screen and (max-width: 1000px) {
+        #title, #subtitle{
+            text-align: center;
+            display: block;
+        }
+
+        #select-year{
+            display: block;
+            text-align: center;
+        }
     }
 </style>

@@ -179,7 +179,6 @@ export default {
         cursor:pointer;
     }
 
-    .title{
-        text-decoration: none;
-    }
+   
+
 </style>
