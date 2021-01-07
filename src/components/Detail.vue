@@ -1,7 +1,7 @@
 <template>
     <div id="main" class="container-fluid pb-4">
         <HeaderWithSelectYear :title="title" :subtitle="subtitle" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear"/>
-        <h3 class="title">Information sur les audits réalisés</h3>
+        <h3 v-if="yearsList.length != 0" class="title">Information sur les audits réalisés</h3>
         <div v-if="yearsList.length != 0" class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
             <div class="row">
                 <div class="col-sm-9">
@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm">
                     <div id="spinner">
-                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" /> 
+                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" />
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
         <div v-else class="container-fluid rounded shadow-sm bg-white my-2 py-4" id="main-infos">
             <h1>La gare de {{stationInfo.name}} n'a pas encore été auditée.</h1>
         </div>
-        <h3 class="title">Suivi annuel du taux de conformité</h3>
+        <h3 v-if="yearsList.length != 0" class="title">Suivi annuel du taux de conformité</h3>
         <ComplianceTracking :years-list="yearsList" :data-years="dataYears" :good-threshold="goodThreshold" :bad-threshold="badThreshold" />
     </div>
 </template>
@@ -28,7 +28,7 @@ import HeaderWithSelectYear from './HeaderWithSelectYear.vue';
 import ComplianceTracking from './ComplianceTracking.vue';
 import PercentSpinnerChart from './PercentSpinnerChart.vue';
 import NumericStatBand from './NumericStatBand.vue'
- 
+
 export default {
     name: "Detail",
     components: {
@@ -54,11 +54,11 @@ export default {
         numericStats(){
             let res = []
             this.stationInfo.scores_for_years.forEach((d) => {
-                let stats = 
+                let stats =
                 {
                     year : d.year,
                     stats:[
-                        { 
+                        {
                             label:"Nombre d'audits",
                             value: d.data.length,
                             tip: null,
@@ -74,10 +74,10 @@ export default {
                             label:"Nombre d'audits au taux de conformité moyen passable",
                             value:d.data.filter(d => (d.value < 95) && (d.value >= 90)).length,
                             tip: "Taux compris entre 90 et 95%",
-                            color: "orange" 
+                            color: "orange"
                         },
                         {
-                            label:"Nombre d'audits au taux de conformité moyen médiocre",
+                            label:"Nombre d'audits au taux de conformité moyen mauvais",
                             value:d.data.filter(d => d.value < 90).length,
                             tip: "Taux inférieur à 90%",
                             color: "red"
@@ -109,7 +109,7 @@ export default {
     data() {
         return {
             title : "",
-            subtitle : "", 
+            subtitle : "",
             currentYear : null,
             yearsList: [],
             yearInfo: null,
@@ -166,6 +166,7 @@ export default {
         text-align: left;
         margin:1em 0em 0.5em 0em;
         padding:0;
+        color: white;
     }
 
     .title a{

@@ -6,7 +6,7 @@ const API_PORT = process.env.VUE_APP_API_PORT
 
 export const store = createStore({
     state() {
-        return {    
+        return {
             regions: [],
             departments: [],
             stations: [],
@@ -74,13 +74,13 @@ export const store = createStore({
             })
         },
         getStation(state,uic_code){
-            axios.get(`http://192.168.1.16:8081/station/${uic_code}`)
+            axios.get(`${API_HOST}:${API_PORT}/station/${uic_code}`)
             .then((response) => {
                 response.data.data[0].scores_for_years.forEach((d) => {
                     d.data.sort((a,b) => {
-                        return parseInt(a.month) - parseInt(b.month) 
+                        return parseInt(a.month) - parseInt(b.month)
                     })
-                    
+
                 })
                 state.station = response.data.data[0]
             }).catch((error) => {

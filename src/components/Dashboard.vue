@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm">
                     <div id="spinner">
-                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité global'" /> 
+                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité global'" />
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
         <DashboardStationsTop :year="currentYear" />
         <h3 class="title">Suivi annuel du taux de conformité</h3>
         <ComplianceTracking :dataYears="globalScores" :years-list="yearsList" :good-threshold="goodThreshold" :bad-threshold="badThreshold" />
-        
+
     </div>
 </template>
 
@@ -80,7 +80,7 @@ export default {
             res.sort((a,b)=>{
                     return parseInt(a.year)-parseInt(b.year)
             })
-            return res  
+            return res
         },
         averageScore() {
             if(this.yearScore != null){
@@ -109,11 +109,11 @@ export default {
         fillNumericStat(data){
             this.NumericStat = []
             data.forEach((d) => {
-                let stats = 
+                let stats =
                 {
                     year : d.year,
                     stats:[
-                        { 
+                        {
                             label:"Nombre de gares auditées",
                             value: d.audit_high+d.audit_low+d.audit_medium,
                             tip: null,
@@ -129,10 +129,10 @@ export default {
                             label:"Nombre de gares au taux de conformité moyen passable",
                             value:d.audit_medium,
                             tip: "Taux compris entre 90 et 95%",
-                            color: "orange" 
+                            color: "orange"
                         },
                         {
-                            label:"Nombre de gares au taux de conformité moyen médiocre",
+                            label:"Nombre de gares au taux de conformité moyen mauvais",
                             value:d.audit_low,
                             tip: "Taux inférieur à 90%",
                             color: "red"
