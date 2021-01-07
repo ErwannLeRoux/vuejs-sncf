@@ -98,6 +98,14 @@
     import {store} from "../storages/stations";
     import Pagination from 'v-pagination-3';
 
+    
+    import jQuery from "jquery";
+    const $ = jQuery;
+    window.$ = $;
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     export default {
         name: "GareList",
         components: {
@@ -315,6 +323,9 @@
             }
         },
         mounted() {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
             if(localStorage.stations) {
                 this.onLoad = false
             }
