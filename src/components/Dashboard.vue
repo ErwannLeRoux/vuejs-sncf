@@ -167,6 +167,7 @@ export default {
         padding:0;
         color:white;
     }
+    
     #main-infos{
         color:#2c3e50
     }
@@ -228,6 +229,12 @@ export default {
         margin-top:1em;
         padding-left:1em;
         min-height: 200px;
+    }
+
+    @media screen and (max-width: 1000px) {
+        .title{
+            text-align: center;
+        }
     }
 
 </style>

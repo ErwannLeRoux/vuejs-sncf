@@ -157,7 +157,7 @@ export default {
 
 <style scoped>
     #main,#loader-container  {
-        width:85%;
+        width:95%;
         margin:auto;
         padding:0;
     }
@@ -229,5 +229,12 @@ export default {
         padding-left:1em;
         min-height: 200px;
     }
+
+    @media screen and (max-width: 1000px) {
+        .title{
+            text-align: center;
+        }
+    }
+
 
 </style>

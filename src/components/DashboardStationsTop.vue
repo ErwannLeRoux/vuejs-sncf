@@ -61,5 +61,10 @@ export default {
         cursor:pointer;
     }
 
+    @media screen and (max-width: 1000px) {
+        .title{
+            text-align: center;
+        }
+    }
 
 </style>
