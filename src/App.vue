@@ -1,9 +1,8 @@
 <template>
-  <div id="app">
+  <main id="app" class="">
     <Navbar :current-location="this.$route.path" />
     <router-view />
-  </div>
-
+  </main>
 </template>
 
 <script>
@@ -22,6 +21,7 @@ export default {
 </script>
 
 <style>
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

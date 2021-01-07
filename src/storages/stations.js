@@ -1,31 +1,79 @@
 import axios from 'axios';
 import { createStore } from 'vuex'
 
+const API_HOST = process.env.VUE_APP_API_HOST
+const API_PORT = process.env.VUE_APP_API_PORT
+
 export const store = createStore({
     state() {
-        return {
+        return {    
             regions: [],
             departments: [],
-            stations: []
+            stations: [],
+            cleanliness: [],
+            global_scores: [],
+            topStations: [],
+            flopStations: [],
         }
     },
     getters: {
-        getRegions: (state) => {
-            return state.regions
+        getGlobalScores: (state) => {
+            return state.global_scores
         },
-        getDepartments: (state) => {
-            return state.departments
+        getTopStations: (state) => {
+            return state.topStations
+        },
+        getFlopStations: (state) => {
+            return state.flopStations
         },
         getStations: (state) => {
             return state.stations
         },
+        getCleanliness: (state) => {
+            return state.cleanliness
+        },
+        getDepartments: (state) => {
+            return state.departments
+        },
+        getRegions: (state) => {
+            return state.regions
+        }
     },
     mutations: {
+        getGlobalScores(state) {
+            axios.get(`${API_HOST}:${API_PORT}/global_scores`)
+            .then((response) => {
+                response.data.data.forEach((year) => {
+                    year.data.sort((a,b) => {
+                        return parseInt(a.month) - parseInt(b.month)
+                    })
+                });
+                state.global_scores = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            });
+        },
+        getTopStations(state,year){
+            axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
+            .then((response) => {
+                state.topStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        getFlopStations(state,year){
+            axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
+            .then((response) => {
+                state.flopStations = response.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
         disconnect(state){
             state.regions = []
         },
         getRegions (state, payload) {
-            axios.get(`http://antoinegonzalez.fr:8081/regions`)
+            axios.get(`${API_HOST}:${API_PORT}/regions`)
                 .then(result => {
                     state.regions = result.data.data
                     this.commit("getDepartments", payload)
@@ -37,7 +85,7 @@ export const store = createStore({
             if(payload) {
                 queryString = `?region=${payload}`
             }
-            let url = `http://antoinegonzalez.fr:8081/departments/${queryString}`
+            let url = `${API_HOST}:${API_PORT}/departments/${queryString}`
 
             axios.get(url)
                 .then(result => {
@@ -46,13 +94,11 @@ export const store = createStore({
                 .catch(console.error);
         },
         getStations(state, payload) {
-
-            axios.get("http://localhost:8081/stations")
+            axios.get(`${API_HOST}:${API_PORT}/stations`)
                 .then(result => {
                     state.stations = result.data.data
                 })
                 .catch(console.error);
-
         }
     },
     actions: {
@@ -78,7 +124,7 @@ export const store = createStore({
                 queryString = `?region=${region}&year=${year}&mode=${mode}`
             }
 
-            let url = `http://localhost:8081/stations/${queryString}`
+            let url = `${API_HOST}:${API_PORT}/stations/${queryString}`
 
             return new Promise(( resolve, reject ) => {
                 axios.get(url)
@@ -92,7 +138,7 @@ export const store = createStore({
           let region = 'Normandie'
           if(payload && payload.region_name) region = payload.region_name
           return new Promise(( resolve, reject ) => {
-              axios.get(`http://antoinegonzalez.fr:8081/regions/?region=${region}`)
+              axios.get(`${API_HOST}:${API_PORT}/regions/?region=${region}`)
                   .then(result => {
                       resolve(result.data.data[0]);
                   })
@@ -101,7 +147,7 @@ export const store = createStore({
         },
         getRegionList (context) {
           return new Promise(( resolve, reject ) => {
-              axios.get(`http://antoinegonzalez.fr:8081/regions`)
+              axios.get(`${API_HOST}:${API_PORT}/regions`)
                   .then(result => {
                       resolve(result.data.data);
                   })

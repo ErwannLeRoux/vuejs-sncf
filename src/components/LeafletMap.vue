@@ -1,6 +1,5 @@
 <template>
     <h3 class="title">{{title}}</h3>
-
     <div class="station-navigation rounded shadow-sm bg-white">
         <div class="filter-control rounded shadow-sm bg-white">
             <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
@@ -98,7 +97,7 @@
                 store.commit("getDepartments", this.regionSelected)
                 let params = { region_name: this.regionSelected, year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
 
-                if((this.stationDisplay == 'non-audited-only' || this.stationDisplay == 'all') && this.regionSelected == 'all') {
+                if((this.stationDisplay == 'non-audited-only' || this.stationDisplay == 'all') && this.regionSelected == 'Toutes les régions') {
                     // toast error not possible
                     this.errorMessage = "Ce mode d'affichage est seulement disponible à l'échelle d'une région"
                 } else {
