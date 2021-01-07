@@ -30,8 +30,6 @@ export default {
             store.commit("getFlopStations",this.year);
         }
     },
-    data() {
-    },
     computed:{
         topStations(){
             return store.getters.getTopStations;
@@ -41,6 +39,8 @@ export default {
         }
     },
     mounted: function(){
+        store.commit("getTopStations",this.year);
+        store.commit("getFlopStations",this.year);
     }
 }
 </script>

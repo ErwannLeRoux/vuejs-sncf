@@ -31,13 +31,23 @@ export default {
         list_items : [
         {
           id : 1,
-          label : "Dashboard",
+          label : "Accueil",
           location : "/",
         },
         {
           id : 2,
-          label : "Gares",
+          label : "Dashboard",
+          location : "/dashboard",
+        },
+        {
+          id : 3,
+          label : "Liste des gares",
           location : "/gares",
+        },
+        {
+          id : 4,
+          label : "Carte",
+          location : "/map",
         }
       ]
         };

@@ -1,5 +1,5 @@
 <template>
-   <header class="container-fluid my-4">
+   <header class="container-fluid">
         <h1 id="title">{{title}}</h1>
         <span v-if="!displaySelect" id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,6 +56,8 @@ export default {
     header {
         padding:0;
         text-align: left;
+        margin-bottom: 4em ;
+        margin-top:2em;
     }
 
     .dropdown-menu a:hover{

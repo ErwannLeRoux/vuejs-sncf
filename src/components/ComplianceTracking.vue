@@ -75,7 +75,7 @@
             }
         },
         mounted: function(){
-            
+            this.graphData = this.initializeGraphData()
         }
     }
 </script>

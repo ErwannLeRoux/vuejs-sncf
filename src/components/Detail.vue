@@ -1,24 +1,23 @@
 <template>
-    <div id="main" class="container-fluid pb-4">
+    <div v-if="dataload" id="main" class="container-fluid pb-4">
         <HeaderWithSelectYear :title="title" :subtitle="subtitle" :current-year="currentYear" :years-list="yearsList" @selectChange="modifyCurrentYear"/>
         <h3 v-if="yearsList.length != 0" class="title">Information sur les audits réalisés</h3>
         <div v-if="yearsList.length != 0" class="container-fluid rounded shadow-sm bg-white my-2" id="main-infos">
-            <div class="row">
-                <div class="col-sm-9">
-                    <NumericStatBand :stats="numericStats" :year="currentYear"/>
-                </div>
-                <div class="col-sm">
-                    <div id="spinner">
-                        <PercentSpinnerChart :percent-value="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :caption="'Taux de conformité moyen'" />
-                    </div>
+            <div class="container-fluid rounded shadow-sm bg-white" id="main-infos">
+                <div class="container-fluid">
+                    <NumericStatBand :avg-score="averageScore" :good-threshold="goodThreshold" :bad-threshold="badThreshold" :stats="numericStats" :year="currentYear"/>
                 </div>
             </div>
         </div>
+      
         <div v-else class="container-fluid rounded shadow-sm bg-white my-2 py-4" id="main-infos">
             <h1>La gare de {{stationInfo.name}} n'a pas encore été auditée.</h1>
         </div>
         <h3 v-if="yearsList.length != 0" class="title">Suivi annuel du taux de conformité</h3>
         <ComplianceTracking :years-list="yearsList" :data-years="dataYears" :good-threshold="goodThreshold" :bad-threshold="badThreshold" />
+    </div>
+    <div v-else id="loader-container" class="d-flex bg-white rounded shadow-sm align-items-center">
+        <div class="loader" id="loader-1"></div>
     </div>
 </template>
 
@@ -26,7 +25,6 @@
 import { store } from './../storages/stations.js';
 import HeaderWithSelectYear from './HeaderWithSelectYear.vue';
 import ComplianceTracking from './ComplianceTracking.vue';
-import PercentSpinnerChart from './PercentSpinnerChart.vue';
 import NumericStatBand from './NumericStatBand.vue'
 
 export default {
@@ -34,7 +32,6 @@ export default {
     components: {
         HeaderWithSelectYear,
         ComplianceTracking,
-        PercentSpinnerChart,
         NumericStatBand
     },
     props: [
@@ -65,21 +62,21 @@ export default {
                             color: null
                         },
                         {
-                            label:"Nombre d'audits au taux de conformité moyen excellent",
+                            label:"Nombre d'audits excellent",
                             value:d.data.filter(d => d.value >= 95).length,
-                            tip: "Taux supérieur égal à 95%",
+                            tip: "Taux de conformité moyen supérieur égal à 95%",
                             color: "green"
                         },
                         {
-                            label:"Nombre d'audits au taux de conformité moyen passable",
+                            label:"Nombre d'audits passable",
                             value:d.data.filter(d => (d.value < 95) && (d.value >= 90)).length,
-                            tip: "Taux compris entre 90 et 95%",
+                            tip: "Taux de conformité moyen compris entre 90 et 95%",
                             color: "orange"
                         },
                         {
-                            label:"Nombre d'audits au taux de conformité moyen mauvais",
+                            label:"Nombre d'audits mauvais",
                             value:d.data.filter(d => d.value < 90).length,
-                            tip: "Taux inférieur à 90%",
+                            tip: "Taux de conformité moyen inférieur à 90%",
                             color: "red"
                         },
                     ]
@@ -91,6 +88,8 @@ export default {
     },
     watch: {
         stationInfo(){
+            console.log(this.stationInfo)
+            this.dataload = true
             this.title = `Détail - Gare de ${this.stationInfo.name}`
             this.subtitle = `${this.stationInfo.department} (${this.stationInfo.dpt_num})`
             if(this.stationInfo.scores_for_years.length != 0){
@@ -118,6 +117,7 @@ export default {
             goodThreshold: "95",
             badThreshold: "90",
             auditsData: [],
+            dataload:false
         };
     },
     methods : {
@@ -156,7 +156,7 @@ export default {
 </script>
 
 <style scoped>
-    #main {
+    #main,#loader-container  {
         width:85%;
         margin:auto;
         padding:0;
@@ -176,6 +176,58 @@ export default {
 
     .title a:hover{
         cursor:pointer;
+    }
+
+    .loader{
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
+        margin: 0 auto;
+        vertical-align: middle;
+    }
+
+    #loader-1:before, #loader-1:after{
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        border: 10px solid transparent;
+        border-top-color: #822171;
+    }
+
+    #loader-1:before{
+        z-index: 100;
+        animation: spin 1s infinite;
+    }
+
+    #loader-1:after{
+        border: 10px solid #ccc;
+    }
+
+    @keyframes spin{
+        0%{
+            -webkit-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        100%{
+            -webkit-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    #loader-container{
+        margin-top:1em;
+        padding-left:1em;
+        min-height: 200px;
     }
 
 </style>

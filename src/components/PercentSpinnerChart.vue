@@ -66,7 +66,7 @@ export default {
   
 <style scoped>
   #spinnerChartContainer{
-        width: 80%;
+        width: 250px;
         margin:auto
     }
 

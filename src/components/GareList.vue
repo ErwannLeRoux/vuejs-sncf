@@ -1,5 +1,7 @@
-<template>
-    <h3 class="list-title">Liste des Gares</h3>
+<template>  
+    <header>
+        <h1 class="list-title">Liste des Gares</h1>
+    </header>
     <div id="container" class="rounded shadow-sm bg-light px-2 py-4">
         <div v-if="!onLoad" id="station-list-container">
             <div class="filter-control rounded shadow-sm bg-white">
@@ -320,11 +322,17 @@
 </script>
 
 <style scoped>
+
+    header{
+        margin-bottom: 4em ;
+        margin-top: 2em;
+        margin-left: 3vw;
+        margin-right: 3vw;
+    }
+
     .list-title {
         color:white;
         text-align: left;
-        margin-left: 3vw;
-        margin-bottom: 3vh;
     }
     .filter-control {
         display: flex;

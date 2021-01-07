@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!onLoad" class="table-responsive-sm rounded shadow-sm bg-white">
+    <div id="table-container" v-if="!onLoad" class="table-responsive-sm rounded shadow-sm bg-white">
         <table class="table" id='table'>
             <thead>
                 <tr>
@@ -17,7 +17,7 @@
                     <td>{{station.name }}</td>
                     <td>{{station.city}}</td>
                     <td>{{station.department}} ({{station.dpt_num}})</td>
-                    <td>{{scores[station.uic_code].avg_score.toFixed(2)}}%</td>
+                    <td :class="station.color">{{scores[station.uic_code].avg_score.toFixed(2)}}%</td>
                     <td class="noTrend" v-if="scores[station.uic_code].trend == '-'">{{scores[station.uic_code].trend}}</td>
                     <td class="goodTrend" v-else-if="scores[station.uic_code].trend >= 0">+{{scores[station.uic_code].trend}}%</td>
                     <td class="badTrend" v-else>{{scores[station.uic_code].trend}}%</td>
@@ -54,7 +54,15 @@ export default {
             })
             this.onLoad=false
             this.stationsList.forEach(station => {
+                station.color = "orange"
                 let avg_score = station.scores_for_years.find(d => d.year == this.year).average_score
+                if(avg_score >= 95){
+                    station.color="green"
+                }else if(avg_score >= 90 && avg_score < 95){
+                    station.color="orange"
+                }else{
+                    station.color="red"
+                }
                 let avg_score_past_year = null
                 let trend = "-"
                 if(station.scores_for_years.find(d => d.year == parseInt(this.year)-1)){
@@ -87,22 +95,28 @@ export default {
 </script>
 
 <style scoped>
-    #container{
+    #table-container{
         color:#2c3e50;
+        overflow: scroll;
     }
     table{
         margin:0
+
     }
     table tbody tr:hover {
         background-color: lightgray;
         cursor: pointer;
     }
-    .goodTrend{
+    .goodTrend, .green{
         color: green;
     }
-    .badTrend{
+    .badTrend, .red{
         color: red;
     }
+    .orange{
+        color: orange;
+    }
+
     .noTrend{
         color:inherit;
     }

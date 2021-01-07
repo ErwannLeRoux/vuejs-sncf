@@ -112,7 +112,7 @@ export default {
             }
         },
         fillTooltip(div,d,e){
-            if(!d.total_checkpoints || !d.not_conform_number){
+            if(!d.total_checkpoints || !d.not_conform_number && d.not_conform_number != 0 && d.total_checkpoints != 0){
                 div.html("Taux de conformité moyen : <span id='val'>"+ d.value.toFixed(2) +" %</span>")
                 .style("left", (e.pageX + 10)  + "px")     
                 .style("top", (e.pageY - 50) + "px");    

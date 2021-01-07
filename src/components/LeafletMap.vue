@@ -1,5 +1,7 @@
 <template>
-    <h3 class="title">{{title}}</h3>
+    <header>
+        <h1 class="title">{{title}}</h1>
+    </header>
     <div class="station-navigation rounded shadow-sm bg-white">
         <div class="filter-control rounded shadow-sm bg-white">
             <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
@@ -219,10 +221,15 @@
     }
 
     .title {
-        margin-left: 3vw;
         text-align: left;
         color: white;
-        margin-top: 3vh;
+    }
+
+    header{
+        margin-bottom: 4em ;
+        margin-top: 2em;
+        margin-left: 3vw;
+        margin-right: 3vw;
     }
 
     #mapContainer {
