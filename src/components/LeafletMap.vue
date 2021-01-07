@@ -225,29 +225,22 @@
     }
 
     header{
-        margin-bottom: 4em ;
-        margin-top: 2em;
-        margin-left: 3vw;
-        margin-right: 3vw;
+        margin: 2em 3vw 4em;
     }
 
     #mapContainer {
         width: 800px;
         height: 600px;
-
     }
 
     .station-navigation {
         padding: 2vw;
         align-items: center;
         background-color: white;
-        margin-top: 3vh;
         display: flex;
         justify-content: space-around;
-        margin-left: 3vw;
-        margin-right: 3vw;
         box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
-        margin-bottom: 30px;
+        margin: 3vh 3vw 30px;
     }
 
     .filter-control {
@@ -262,6 +255,26 @@
         padding: 2em;
         border-radius: 10px;
         box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+    }
+
+    @media (min-width: 0px) and (max-width: 979px) {
+        .station-navigation {
+            flex-direction: column;
+        }
+
+        #mapContainer {
+            width: 100%;
+            height: 400px;
+        }
+
+        .filter-control {
+            width: 100%;
+            height: auto;
+        }
+
+        .title {
+            text-align: center;
+        }
     }
 
     .loader{
