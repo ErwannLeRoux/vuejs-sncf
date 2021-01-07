@@ -4,6 +4,7 @@ import Gares from "@/components/Gares.vue";
 import Detail from "@/components/Detail.vue";
 import { createWebHistory, createRouter} from "vue-router";
 
+
 const routes = [
   {
     path: "/",

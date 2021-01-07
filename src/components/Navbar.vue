@@ -21,7 +21,7 @@
 export default {
     name: "Navbar",
     components: {
-      
+
     },
     props: [
         "currentLocation"
@@ -43,7 +43,7 @@ export default {
         };
     },
     methods :{
-      
+
     },
 }
 

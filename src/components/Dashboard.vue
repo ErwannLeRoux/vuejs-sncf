@@ -170,6 +170,7 @@ export default {
         width:85%;
         margin:auto;
         padding:0;
+        color:white;
     }
     #main-infos{
         color:#2c3e50
