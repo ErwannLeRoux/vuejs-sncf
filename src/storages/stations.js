@@ -81,13 +81,25 @@ export const store = createStore({
                 .catch(console.error);
         },
         getDepartments (state, payload) {
+            let queryString = ''
+            if(payload) {
+                queryString = `?region=${payload}`
+            }
+            let url = `${API_HOST}:${API_PORT}/departments/${queryString}`
 
-            axios.get(`${API_HOST}:${API_PORT}/departments/?region=${payload}`)
+            axios.get(url)
                 .then(result => {
                     state.departments = result.data.data
                 })
                 .catch(console.error);
         },
+        getStations(state, payload) {
+            axios.get(`${API_HOST}:${API_PORT}/stations`)
+                .then(result => {
+                    state.stations = result.data.data
+                })
+                .catch(console.error);
+        }
     },
     actions: {
         getStations (context, payload) {
