@@ -1,4 +1,4 @@
-<template>  
+<template>
     <header>
         <h1 class="list-title">Liste des Gares</h1>
     </header>
@@ -9,7 +9,7 @@
                     <label for="search-input">Rechercher : </label>
                     <input id="search-input" v-model="filterText" class="form-control"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group desktop-fields">
                     <label for="regionSelect">Région : </label>
                     <select id="regionSelect" class="form-control" v-model="regionSelected" @change="displayConfigChanged()">
                         <option value="Toutes les régions">Toutes les régions</option>
@@ -18,7 +18,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group desktop-fields">
                     <label for="depSelect">Département : </label>
                     <select id="depSelect" class="form-control" v-model="selectedDep" @change="displayConfigChanged()">
                         <option value="-1">Tous les départements</option>
@@ -27,7 +27,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group desktop-fields">
                     <label for="yearSelect">Année : </label>
                     <select class="form-control" id="yearSelect" v-model="selectedYear" @change="displayConfigChanged()">
                         <option>2020</option>
@@ -36,7 +36,7 @@
                         <option>2017</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group desktop-fields">
                     <label for="auditedSelect"> Affichage : </label>
                     <select class="form-control" id="auditedSelect" v-model="stationDisplay" @change="displayConfigChanged()">
                         <option value="audited-only">Audités seulement</option>
@@ -44,7 +44,7 @@
                         <option value="all">Toutes les gares</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group desktop-fields">
                     <label for="sortSelect"> Affichage : </label>
                     <select class="form-control" id="sortSelect" v-model="sortMode" @change="displayConfigChanged()">
                         <option value="desc">Trier par moyenne décroissante</option>
@@ -53,7 +53,6 @@
                         <option value="tend-asc">Trier par tendance croissante</option>
                     </select>
                 </div>
-
             </div>
             <div id="table-container" class="table-responsive-sm rounded py-2 px-2">
                 <table class="table" id='table'>
@@ -329,23 +328,37 @@
 <style scoped>
 
     header{
-        margin-bottom: 4em ;
-        margin-top: 2em;
-        margin-left: 3vw;
-        margin-right: 3vw;
+        margin: 2em 3vw 4em;
     }
 
     .list-title {
         color:white;
         text-align: left;
     }
+
     .filter-control {
         display: flex;
         width: 100%;
         justify-content: space-around;
     }
 
+    @media (min-width: 0px) and (max-width: 1300px) {
+        .filter-control {
+            flex-direction: column;
+        }
+
+        .filter-control .form-group {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+
+        .filter-control .desktop-fields {
+            display: none;
+        }
+    }
+
     #station-list-container {
+        overflow: scroll ;
         display: flex;
         flex-direction: column;
         align-items: center;
