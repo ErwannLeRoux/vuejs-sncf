@@ -1,6 +1,6 @@
 <template>
-    <div v-if="yearsList.length != 0" class="container-fluid rounded shadow-sm bg-white my-2 py-4 px-2" id="complianceTracking">
-        <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange"></ComplianceTrackingSelect>
+    <div v-if="yearsList.length != 0" class="rounded shadow-sm bg-white" id="complianceTracking">
+        <ComplianceTrackingSelect :years-list="yearsList" @selectionChange="selectionChange" />
         <ComplianceTrackingChart  :data-years="graphData" :good-threshold="goodThreshold" :bad-threshold="badThreshold" @legendChange="actualizeLegendData" /> 
         <ComplianceTrackingLegend :lines="legendData" />    
     </div>    
@@ -82,6 +82,7 @@
 <style scoped>
     #complianceTracking{
         color:#2c3e50;
+        padding: 2em 0em;
     }
 </style>
 

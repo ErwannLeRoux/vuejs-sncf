@@ -1,40 +1,32 @@
 <template>
-    <div id="container" class="rounded shadow-sm bg-light px-2 py-4">  
-        <div v-if="!onLoad" id="header" class="d-flex justify-content-center flex-wrap mx-2 pt-2">
-                <svg id="trend-rect" width="30" height="30" v-bind:fill="info.color">
-                    <rect x="0" y="0" rx="5" ry="5" width="30" height="30" style="opacity:0.5"/>
-                </svg>
-                <h4 id="title" class="pl-2"><a class="tip title" data-toggle="tooltip" :title="info.tip">{{info.title}}</a></h4>
-        </div>
-        <div v-if="!onLoad" class="table-responsive-sm rounded py-2 px-2">
-            <table class="table" id='table'>
-                <thead>
-                    <tr>
-                        <th scope="col">Code_uic</th>
-                        <th scope="col">Libellé</th>
-                        <th scope="col">Commune</th>
-                        <th scope="col">Département</th>
-                        <th scope="col"><a class="tip" data-toggle="tooltip" title="Taux de conformité obtenu en %">Score </a></th>
-                        <th scope="col"><a class="tip" data-toggle="tooltip" title="Différence avec l'année précédente">Tendance annuelle</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr :key="station.uic_code" v-for="station in stationsList" @click="redirectDetail(station.uic_code)">
-                        <td>{{station.uic_code}}</td>
-                        <td>{{station.name }}</td>
-                        <td>{{station.city}}</td>
-                        <td>{{station.department}} ({{station.dpt_num}})</td>
-                        <td>{{scores[station.uic_code].avg_score.toFixed(2)}}%</td>
-                        <td class="noTrend" v-if="scores[station.uic_code].trend == '-'">{{scores[station.uic_code].trend}}</td>
-                        <td class="goodTrend" v-else-if="scores[station.uic_code].trend >= 0">+{{scores[station.uic_code].trend}}%</td>
-                        <td class="badTrend" v-else>{{scores[station.uic_code].trend}}%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div v-else id="loader-container">
-            <div class="loader" id="loader-1"></div>
-        </div>
+    <div v-if="!onLoad" class="table-responsive-sm rounded shadow-sm bg-white">
+        <table class="table" id='table'>
+            <thead>
+                <tr>
+                    <th scope="col">Code_uic</th>
+                    <th scope="col">Libellé</th>
+                    <th scope="col">Commune</th>
+                    <th scope="col">Département</th>
+                    <th scope="col"><a class="tip" data-toggle="tooltip" title="Taux de conformité obtenu en %">Score </a></th>
+                    <th scope="col"><a class="tip" data-toggle="tooltip" title="Différence avec l'année précédente">Tendance annuelle</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr :key="station.uic_code" v-for="station in stationsList" @click="redirectDetail(station.uic_code)">
+                    <td>{{station.uic_code}}</td>
+                    <td>{{station.name }}</td>
+                    <td>{{station.city}}</td>
+                    <td>{{station.department}} ({{station.dpt_num}})</td>
+                    <td>{{scores[station.uic_code].avg_score.toFixed(2)}}%</td>
+                    <td class="noTrend" v-if="scores[station.uic_code].trend == '-'">{{scores[station.uic_code].trend}}</td>
+                    <td class="goodTrend" v-else-if="scores[station.uic_code].trend >= 0">+{{scores[station.uic_code].trend}}%</td>
+                    <td class="badTrend" v-else>{{scores[station.uic_code].trend}}%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-else id="loader-container" class="d-flex align-items-center rounded shadow-sm bg-white">
+        <div class="loader" id="loader-1"></div>
     </div>
 </template>
 
@@ -90,13 +82,16 @@ export default {
             this.$router.push({ path: `/detail/${code_uic}` })
         }
     },
-    props: ["year","info","stationsList"],
+    props: ["year","stationsList"],
 }
 </script>
 
 <style scoped>
     #container{
         color:#2c3e50;
+    }
+    table{
+        margin:0
     }
     table tbody tr:hover {
         background-color: lightgray;
@@ -118,6 +113,7 @@ export default {
         border-radius: 100%;
         position: relative;
         margin: 0 auto;
+        vertical-align: middle;
     }
 
     #loader-1:before, #loader-1:after{
@@ -159,14 +155,14 @@ export default {
 
     #loader-container{
         margin-top:1em;
-        padding-left:1em
+        padding-left:1em;
+        min-height: 200px;
     }
 
     .tip{
         text-decoration: underline;
         color: inherit;
         cursor:pointer;
-        
     }
 
     .title{

@@ -1,7 +1,6 @@
 <template>
-
-    <div id="stats-container" class="d-flex justify-content-around align-items-center px-2 flex-wrap">
-        <div class="stat" :class="{'tip': (stat.tip != null) }" data-toggle="tooltip" :title="stat.tip"  :key="stat.label" v-for="stat in currentStat" >
+    <div id="stats-container" class="d-flex align-items-center flex-wrap">
+        <div class="stat rounded" :class="{'tip': (stat.tip != null) }" data-toggle="tooltip" :title="stat.tip"  :key="stat.label" v-for="stat in currentStat" >
             <div :class="'value '+stat.color">{{stat.value}}</div>
             <div :class="'label '+stat.color">{{stat.label}}</div>
         </div>
@@ -40,6 +39,8 @@ export default {
 
     },
     mounted: function(){
+        if(this.year)
+            this.currentStat = this.stats.find(d => d.year == this.year).stats
     }
 }
 </script>
@@ -47,10 +48,11 @@ export default {
 <style scoped>
     .value{
         font-size: 3em;
+        opacity: 0.6;
     }
     #stats-container{
-        height: 50%;
         color: #2c3e50;
+        height: 100%;
     }
     .orange{
         color:orange
@@ -61,15 +63,18 @@ export default {
     .red{
         color:red
     }
-    .value{
-        opacity: 0.6;
-    }
+
     .stat{
-        width:200px;
-        margin:1em
+        width:50%
+    }
+    
+    .stat .label{
+        width:50%;
+        margin:auto
     }
 
-    .tip{
+    .tip:hover{
+        background-color: lightgray ;
         cursor:pointer;
     }
      

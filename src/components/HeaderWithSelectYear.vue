@@ -1,6 +1,6 @@
 <template>
    <header class="container-fluid my-4">
-        <h2 id="title">{{title}}</h2>
+        <h1 id="title">{{title}}</h1>
         <span v-if="!displaySelect" id="select-year" class="dropdown show ">
             <a class="btn dropdown-toggle bg-white rounded shadow-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{selectedYear}}            
@@ -9,7 +9,7 @@
                 <a class="dropdown-item" href="#" :key="item.year" v-for="item in yearsList" @click="select(item)">{{item.year}}</a>    
             </div>
         </span>
-        <h4 id="subtitle" v-if="subtitle">{{subtitle}}</h4>
+        <h3 id="subtitle" v-if="subtitle">{{subtitle}}</h3>
    </header>
 </template>
 

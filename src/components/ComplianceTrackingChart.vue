@@ -14,10 +14,10 @@ export default {
     data() {
         return {
             margin : {
-                top: 20,
-                right: 10,
+                top: 10,
+                right: 40,
                 bottom: 20,
-                left: 50
+                left: 80
             },
             monthMap : {
                 "01" : "Janvier",
@@ -121,7 +121,6 @@ export default {
                     <p>Taux de conformité : <span id='val'> ${d.value.toFixed(2)} %</span></p>
                     <p>Nombres d'observations : ${d.total_checkpoints}</p>
                     <p>Nombres de non-conformitées : ${d.not_conform_number}</p>
-                    
                 `)
                 .style("left", (e.pageX + 10)  + "px")     
                 .style("top", (e.pageY - 50) + "px");
@@ -298,9 +297,7 @@ export default {
                                 d3.select(this)
                                 .style("opacity", 1)
                                 .style("cursor", "pointer")
-                                /*d3.select("#line-month-"+d.month)
-                                .style("display","inherit")*/
-
+    
                                 div.transition()        
                                 .duration(200)      
                                 .style("opacity", 0.8)
@@ -313,8 +310,7 @@ export default {
                             })
                             .on("mouseout", function () {
                                 d3.select(this).style("opacity", 0.7)
-                                /*d3.select("#line-month-"+d.month)
-                                .style("display","none")*/
+
                                 div.transition()        
                                 .duration(200)      
                                 .style("opacity", 0)
@@ -358,14 +354,6 @@ export default {
 </style>
 
 <style scoped>
-
-    #complianceTrackingChart {
-        display: inline-block;
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-    }
-    
 </style>
 
 
