@@ -1,7 +1,7 @@
 <template>
     <h3 class="list-title">Liste des Gares</h3>
     <div id="container" class="rounded shadow-sm bg-light px-2 py-4">
-        <div v-if="!onLoad" id="station-list-container">
+        <div v-if="!onLoad " id="station-list-container">
             <div class="filter-control rounded shadow-sm bg-white">
                 <div class="form-group">
                     <label for="search-input">Rechercher : </label>
@@ -90,8 +90,6 @@
             <div class="loader" id="loader-1"></div>
         </div>
     </div>
-
-
 </template>
 
 
@@ -113,7 +111,8 @@
                 selectedYear: '2020',
                 regionSelected: 'Toutes les régions',
                 sortMode: 'asc',
-                filterText: ''
+                filterText: '',
+                onLoad: true
             };
         },
         computed: {
@@ -130,7 +129,6 @@
                         return (name_contains || dpt_contains || region_contains || city_contains || uic_contains)
                     })
                 }
-
 
                 if(this.stationDisplay == 'audited-only') {
                     s = s.filter((station) => {
@@ -225,7 +223,6 @@
                         }
                     })
                 }
-
                 return s
             },
             options: function () {
@@ -249,6 +246,11 @@
                 } else {
                     return 10
                 }
+            }
+        },
+        watch: {
+            stations: function() {
+                this.onLoad = false
             }
         },
         methods: {
@@ -406,6 +408,6 @@
         text-decoration: underline;
         color: inherit;
         cursor:pointer;
-
     }
+
 </style>

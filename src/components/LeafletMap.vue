@@ -1,7 +1,8 @@
 <template>
     <h3 class="title">{{title}}</h3>
+
     <div class="station-navigation rounded shadow-sm bg-white">
-        <div class="filter-control rounded shadow-sm bg-white">
+        <div v-show="!onLoad" class="filter-control rounded shadow-sm bg-white">
             <p class="error-message" v-if="errorMessage">{{errorMessage}}</p>
             <div class="form-group">
                 <label for="regionSelect">Région : </label>
@@ -41,9 +42,10 @@
                 </select>
             </div>
         </div>
-        <div class="loader" id="loader-1"></div>
-        <div id="mapContainer" class="rounded shadow-sm bg-white"></div>
+        <div v-show="!onLoad" id="mapContainer" class="rounded shadow-sm bg-white" ></div>
+        <div v-if="onLoad" class="loader" id="loader-1"></div>
     </div>
+
 </template>
 <script>
     const L = window.L
@@ -73,7 +75,8 @@
                 zoom: 5,
                 iconWidth: 25,
                 iconHeight: 40,
-                errorMessage: ""
+                errorMessage: "",
+                onLoad: true
             };
         },
         computed: {
@@ -87,12 +90,14 @@
                 return this.regionSelected + " - "+this.selectedYear
             }
         },
+        watch: {
+            onLoad: function() {
+                setTimeout(() =>{ this.map.invalidateSize()}, 200);
+            }
+        },
         methods: {
             displayConfigChanged: function() {
                 this.errorMessage = ""
-                let $spinner = window.$(".loader")
-                let $map     = window.$("#mapContainer")
-
 
                 store.commit("getDepartments", this.regionSelected)
                 let params = { region_name: this.regionSelected, year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
@@ -101,8 +106,7 @@
                     // toast error not possible
                     this.errorMessage = "Ce mode d'affichage est seulement disponible à l'échelle d'une région"
                 } else {
-                    $spinner.show()
-                    $map.hide()
+                    this.onLoad = true
                     store.dispatch("getStations", params).then((stations) => {
                         store.dispatch("getRegions", {region_name: this.regionSelected}).then((region) => {
                             let zoom = 6
@@ -112,8 +116,7 @@
                                 viewBox.lat = region.lat,
                                     viewBox.lng = region.lng
                             }
-                            $spinner.hide()
-                            $map.show()
+
                             this.buildMap(stations, viewBox, zoom, false)
                         }).catch(console.error)
                     }).catch(console.error)
@@ -184,12 +187,10 @@
                     }
                 })
                 this.markers.addTo(this.map)
+                this.onLoad = false
             }
         },
         mounted() {
-            let $spinner = window.$(".loader")
-            let $map     = window.$("#mapContainer")
-
             this.initMapContext()
             store.commit("getRegions", this.regionSelected)
             let params = { region_name: this.regionSelected,  year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
@@ -203,10 +204,7 @@
                       viewBox.lat = region.lat,
                           viewBox.lng = region.lng
                   }
-                  $spinner.hide()
-                  $map.show()
                   this.buildMap(stations, viewBox, zoom, true)
-
               })
             })
         }
@@ -228,7 +226,7 @@
     #mapContainer {
         width: 800px;
         height: 600px;
-        display: none;
+
     }
 
     .station-navigation {
