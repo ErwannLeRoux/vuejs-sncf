@@ -33,8 +33,13 @@ export const store = createStore({
                 .catch(console.error);
         },
         getDepartments (state, payload) {
+            let queryString = ''
+            if(payload) {
+                queryString = `?region=${payload}`
+            }
+            let url = `http://antoinegonzalez.fr:8081/departments/${queryString}`
 
-            axios.get(`http://antoinegonzalez.fr:8081/departments/?region=${payload}`)
+            axios.get(url)
                 .then(result => {
                     state.departments = result.data.data
                 })
