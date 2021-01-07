@@ -8,9 +8,9 @@
   </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" v-bind:class="{active: item.location == currentLocation}" :key="item.id" v-bind:href="item.location" v-for="item in list_items" @click="makeActive(item, list_items)">
+        <router-link class="nav-link" v-bind:class="{active: item.location == currentLocation}" :key="item.id" :to="item.location" v-for="item in list_items" @click="makeActive(item, list_items)">
           {{ item.label }}
-        </a>
+        </router-link>
       </div>
     </div>
   </nav>
