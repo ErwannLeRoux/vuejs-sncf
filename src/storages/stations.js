@@ -58,20 +58,30 @@ export const store = createStore({
             });
         },
         getTopStations(state,year){
-            axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
-            .then((response) => {
-                state.topStations = response.data.data
-            }).catch((error) => {
-                console.log(error)
-            })
+            if(localStorage.topStations) {
+                state.topStations = JSON.parse(localStorage.getItem('topStations'));
+            } else {
+                axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
+                    .then((response) => {
+                        localStorage.setItem('topStations', JSON.stringify(response.data.data));
+                        state.topStations = response.data.data
+                    }).catch((error) => {
+                    console.log(error)
+                })
+            }
         },
         getFlopStations(state,year){
-            axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
-            .then((response) => {
-                state.flopStations = response.data.data
-            }).catch((error) => {
-                console.log(error)
-            })
+            if(localStorage.flopStations) {
+                state.flopStations = JSON.parse(localStorage.getItem('flopStations'));
+            } else {
+                axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
+                    .then((response) => {
+                        localStorage.setItem('flopStations', JSON.stringify(response.data.data));
+                        state.flopStations = response.data.data
+                    }).catch((error) => {
+                    console.log(error)
+                })
+            }
         },
         getStation(state,uic_code){
             axios.get(`${API_HOST}:${API_PORT}/station/${uic_code}`)
@@ -91,12 +101,17 @@ export const store = createStore({
             state.regions = []
         },
         getRegions (state, payload) {
-            axios.get(`${API_HOST}:${API_PORT}/regions`)
-                .then(result => {
-                    state.regions = result.data.data
-                    this.commit("getDepartments", payload)
-                })
-                .catch(console.error);
+            if(localStorage.regions) {
+                state.regions = JSON.parse(localStorage.getItem('regions'));
+            } else {
+                axios.get(`${API_HOST}:${API_PORT}/regions`)
+                    .then(result => {
+                        localStorage.setItem('regions', JSON.stringify(result.data.data));
+                        state.regions = result.data.data
+                        this.commit("getDepartments", payload)
+                    })
+                    .catch(console.error);
+            }
         },
         getDepartments (state, payload) {
             let queryString = ''
@@ -112,11 +127,16 @@ export const store = createStore({
                 .catch(console.error);
         },
         getStations(state, payload) {
-            axios.get(`${API_HOST}:${API_PORT}/stations`)
-                .then(result => {
-                    state.stations = result.data.data
-                })
-                .catch(console.error);
+            if(localStorage.stations) {
+                state.stations = JSON.parse(localStorage.getItem('stations'));
+            } else {
+                axios.get(`${API_HOST}:${API_PORT}/stations`)
+                    .then(result => {
+                        localStorage.setItem('stations', JSON.stringify(result.data.data));
+                        state.stations = result.data.data
+                    })
+                    .catch(console.error);
+            }
         }
     },
     actions: {
