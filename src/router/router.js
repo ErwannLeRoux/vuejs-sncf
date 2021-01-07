@@ -3,7 +3,7 @@ import Dashboard from "@/components/Dashboard.vue";
 import Gares from "@/components/Gares.vue";
 import Detail from "@/components/Detail.vue";
 import { createWebHistory, createRouter} from "vue-router";
-import LeafletMap from "../components/LeafletMap";
+
 
 const routes = [
   {
@@ -20,11 +20,6 @@ const routes = [
       path: "/detail/:id",
       name: "Detail",
       component: Detail,
-  },
-  {
-      path: "/map",
-      name: "Map",
-      component: LeafletMap,
   }
 ];
 

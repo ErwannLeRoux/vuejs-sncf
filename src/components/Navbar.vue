@@ -21,7 +21,7 @@
 export default {
     name: "Navbar",
     components: {
-      
+
     },
     props: [
         "currentLocation"
@@ -37,13 +37,13 @@ export default {
         {
           id : 2,
           label : "Gares",
-          location : "/map",
+          location : "/gares",
         }
       ]
         };
     },
     methods :{
-      
+
     },
 }
 
