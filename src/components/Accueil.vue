@@ -15,15 +15,16 @@
 
         <p>
             Cette application à donc vocation à <b>surveiller la conformité des gares de la SNCF</b> par rapport aux différents audits/contrôles qui ont été réalisés.
-            Dans cette optique nous proposons :
         </p>
 
-        <ul>
-            <li>un  <router-link to="/dashboard">dashbord</router-link> permettant de visualiser l'état général de la SNCF sur une année donnée.</li>
-            <li>une <router-link to="/map">map</router-link> permettant de rechercher sur toute la France une gare spécifique.</li>
-            <li>une <router-link to="/gares">interface de recherche tabulaire</router-link>, qui de même permet de rechercher une gare spécifique.</li>
-            <li>pour chaque gare une page de détail permettant de visualiser le taux de conformité et les différents audits qui y ont été réalisés.</li>
-        </ul>
+        <p id="list-head">Dans cette optique nous proposons :</p>
+            <ul>
+                <li>Un  <router-link to="/dashboard">dashbord</router-link> permettant de visualiser l'état général de la SNCF sur une année donnée.</li>
+                <li>Une <router-link to="/map">map</router-link> permettant de rechercher sur toute la France une gare spécifique.</li>
+                <li>Une <router-link to="/gares">interface de recherche tabulaire</router-link>, qui de même permet de rechercher une gare spécifique.</li>
+                <li>Pour chaque gare une page de détail permettant de visualiser le taux de conformité et les différents audits qui y ont été réalisés.</li>
+            </ul>
+        
     </div>
 </template>
 
@@ -45,6 +46,7 @@ export default {
 </script>
 
 <style scoped>
+
     #main{
         width:75%;
         margin:auto;
@@ -62,4 +64,46 @@ export default {
     #main p{
         color: #2c3e50;
     }
+
+    @media screen and (max-width: 1000px) {
+        #main p{
+            text-align:center
+        }
+
+        #main #title{
+            padding-bottom: 4vh;
+        }
+
+        #main{
+            width:95%;
+            margin:auto;
+            margin-top:3vw;
+            padding:3vw;
+            text-align:justify;
+        }
+
+        #main ul{
+            padding:0;
+            text-align: center;
+            list-style-type: none;
+        }
+
+        #main ul li{
+            padding:1em 0em ;
+            text-align: center;
+            list-style-type: none;
+        }
+
+        #main ul li, p:not(#list-head){
+            border: lightgray solid 1px;
+            padding: 1em ;
+            margin:0.5em;
+            text-align: center;
+        }
+
+        #list-head{
+            margin-top:2em;
+        }
+    }
+
 </style>
