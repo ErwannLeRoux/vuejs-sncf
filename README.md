@@ -45,15 +45,14 @@ Notre application se compose :
     - un top 5 des meilleures et des pires gares auditées pour l'année sélectionnée.
     - un graphique de suivi annuel  du taux de conformité moyen fait via d3, pour l'année sélectionnée on peut y voir les variations pour chaque mois de l'année du score moyen obtenues sur l'ensemble des audits réalisés. Nous avons aussi permit de faire une étude comparatives entre plusieurs années en permettant à l'utilisateur d'ajouter dynamiquement la courbe d'une année au graphique.
 
-4. d'**une page map** permettant de visualiser au sein d'une carte intéractives les différentes gares su réseau SNCF. Chaque gare est indiqué par un marqueur correspondant à son état (gris = non auditées, vert = bon résultats sur ses audits, orange = résultats moyens, rouge = résultats mauvais).
-Cette carte est accompagnée de divers filtres comme par exemple une sélection du département ou de la région d'appartennance des gares. Si l'utilisateur clique sur le marqueur associée à une gare alors il est rediriger sur sa page de détail.
+4. d'**une page map** permettant de visualiser au sein d'une carte intéractives les différentes gares su réseau SNCF. Chaque gare est indiqué par un marqueur correspondant à son état. Cette carte est accompagnée de divers filtres comme par exemple une sélection du département ou de la région d'appartennance des gares. Si l'utilisateur clique sur le marqueur associée à une gare alors il est rediriger sur sa page de détail.
 5. d'**une page listes des gares** qui contient un tableau contenant toute les gares de la SNCF, pour chaque gare sont affichées différentes informations comme le taux de conformité obtenues (score) ou la tendance annuelle qui représente l'évolution du score par rapport à l'année précédente.
-Ce tableau est accompagnée de différents filtres de recherches permettant à l'utilisateur de facilement trouver une gare spécifique ou d'affiner sa recherche (en tappant le nom ou le code associée à une gare dans le champs de recherche textuel par exemple).
+Ce tableau est accompagnée de différents filtres de recherches permettant à l'utilisateur de facilement trouver une gare spécifique ou d'affiner sa recherche (en tappant le nom ou le code associée à une gare dans le champs de recherche textuel par exemple). Comme pour la map un clique sur un élément du tableau redirige vers la page de détail de la gare associée.
 6. **d'une page de détail** pour chaque gare, cette page permet de visualiser l'état générale de la gare à partir des différents audits opérés. 
 On y retrouve des composants similaires à la page de dashboard, nottament le graphique de suivi annuel. 
 
 
-**Charte graphique de l'application**
+**Charte graphique de l'application:**
 
 Pour le choix des couleurs de notre application nous nous sommes inspirée du logo de la sncf, nous avons donc obté pour un dégradé partant du violet vers un rouge "framboise" comme couleur de font principale et le blanc comme couleur de titres et de zones de contenus.
 
