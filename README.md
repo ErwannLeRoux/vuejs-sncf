@@ -37,6 +37,7 @@ Pour le logo nous avons choisis le logo de la sncf que nous avons adapté au nom
 
 Enfin notre application ayant comme objectif de pouvoir suivre les résultats des différents audits de contrôle de propreté nous avons choisi d'utiliser un code couleur permettant de facilement voir la qualité des résultats obtenues, ainsi la couleur verte est associée à un score "excellent" qui répond fortement au éxigence de la SNCF, le orange à un score "passable" qui répond tout juste au éxigence et le rouge à un score "mauvais" qui n'atteint pas les éxigences de la SNCF.
 
+
 ## Project setup
 ```
 npm install
@@ -57,8 +58,8 @@ npm run build
 npm run lint
 ```
 
-### docker-compose.yml pour notre application
-
+### docker-compose.yml pour l'application vuejs
+```
 version: '3.7'
 services:
   sncf-nginx:
@@ -69,10 +70,10 @@ services:
     volumes:
       - ./sncf-nginx.conf:/etc/nginx/conf.d/default.conf
       - ./dist/:/usr/share/nginx/html/
-
+```
 
 ### docker-compose.yml pour mongoDB
-
+```
 version: "3.7"
 services:
   mongo_sncf:
@@ -86,12 +87,11 @@ services:
     networks:
       - network
 networks:
-
+```
 
 ### Configuration server NGINX
-
+```
 server {
-
         listen 80 default_server;
         listen [::]:80 default_server;
         root /usr/share/nginx/html;
@@ -103,7 +103,7 @@ server {
                 try_files $uri $uri/ /index.html;
         }
 }
-
+```
 
 
 
