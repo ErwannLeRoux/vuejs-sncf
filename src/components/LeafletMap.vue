@@ -76,7 +76,8 @@
                 iconWidth: 25,
                 iconHeight: 40,
                 errorMessage: "",
-                onLoad: true
+                onLoad: true,
+                oldRegion: 'Toutes les régions'
             };
         },
         computed: {
@@ -93,14 +94,20 @@
         watch: {
             onLoad: function() {
                 setTimeout(() =>{ this.map.invalidateSize()}, 200);
-            }
+            },
         },
         methods: {
             displayConfigChanged: function() {
                 this.errorMessage = ""
 
+                if(this.oldRegion != this.regionSelected) {
+                    this.selectedDep = '-1'
+                }
+                this.oldRegion = this.regionSelected
+
                 store.commit("getDepartments", this.regionSelected)
                 let params = { region_name: this.regionSelected, year: this.selectedYear, mode: this.stationDisplay, dep: this.selectedDep }
+
 
                 if((this.stationDisplay == 'non-audited-only' || this.stationDisplay == 'all') && this.regionSelected == 'Toutes les régions') {
                     // toast error not possible

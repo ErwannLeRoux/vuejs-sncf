@@ -58,30 +58,22 @@ export const store = createStore({
             });
         },
         getTopStations(state,year){
-            if(localStorage.topStations) {
-                state.topStations = JSON.parse(localStorage.getItem('topStations'));
-            } else {
-                axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
-                    .then((response) => {
-                        localStorage.setItem('topStations', JSON.stringify(response.data.data));
-                        state.topStations = response.data.data
-                    }).catch((error) => {
-                    console.log(error)
-                })
-            }
+            axios.get(`${API_HOST}:${API_PORT}/top5?year=${year}`)
+                .then((response) => {
+                    localStorage.setItem('topStations', JSON.stringify(response.data.data));
+                    state.topStations = response.data.data
+                }).catch((error) => {
+                console.log(error)
+            })
         },
         getFlopStations(state,year){
-            if(localStorage.flopStations) {
-                state.flopStations = JSON.parse(localStorage.getItem('flopStations'));
-            } else {
-                axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
-                    .then((response) => {
-                        localStorage.setItem('flopStations', JSON.stringify(response.data.data));
-                        state.flopStations = response.data.data
-                    }).catch((error) => {
-                    console.log(error)
-                })
-            }
+            axios.get(`${API_HOST}:${API_PORT}/worst5?year=${year}`)
+                .then((response) => {
+                    localStorage.setItem('flopStations', JSON.stringify(response.data.data));
+                    state.flopStations = response.data.data
+                }).catch((error) => {
+                console.log(error)
+            })
         },
         getStation(state,uic_code){
             axios.get(`${API_HOST}:${API_PORT}/station/${uic_code}`)
@@ -126,16 +118,21 @@ export const store = createStore({
                 .catch(console.error);
         },
         getStations(state, payload) {
+            let fetchRequest = false
             if(localStorage.stations) {
                 state.stations = JSON.parse(localStorage.getItem('stations'));
-            } else {
-                axios.get(`${API_HOST}:${API_PORT}/stations`)
-                    .then(result => {
-                        localStorage.setItem('stations', JSON.stringify(result.data.data));
-                        state.stations = result.data.data
-                    })
-                    .catch(console.error);
             }
+
+            axios.get(`${API_HOST}:${API_PORT}/stations`)
+                .then(result => {
+                    try {
+                        localStorage.setItem('stations', JSON.stringify(result.data.data));
+                    } catch(e) {
+                        console.error(e)
+                    }
+                    state.stations = result.data.data
+                })
+                .catch(console.error);
         }
     },
     actions: {
@@ -162,7 +159,11 @@ export const store = createStore({
                     return new Promise(( resolve, reject ) => {
                         axios.get(`${API_HOST}:${API_PORT}/stations/?year=${year}&mode=${mode}`)
                             .then(result => {
-                                localStorage.setItem('defaultMapConfig', JSON.stringify(result.data.data))
+                                try {
+                                    localStorage.setItem('defaultMapConfig', JSON.stringify(result.data.data))
+                                } catch(e) {
+                                    console.error(e)
+                                }
                                 resolve(result.data.data);
                             })
                             .catch((err) => reject(err));
